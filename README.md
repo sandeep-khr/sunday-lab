@@ -117,11 +117,11 @@
 1. 90 SPECIFIC WAYS TO WRITE BETTER PYTHON
 2. 50 Python tricks
 
-# javascript
-1. javascript Interview Questions
+# Javascript
+1. javascript 30 Questions (Leetcode)
 
 # Typescript
-1. Typescript interview questions
+1. Typescript 30 questions (Leetcode)
 
 # Go
 1. A tour of GO
