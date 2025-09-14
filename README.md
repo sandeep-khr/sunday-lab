@@ -1,30 +1,30 @@
 # Web Dev
-1. Tic-Tac-Toe: Official react tutorial with detialed comments and little refactorings
-2. Thinking in React: Official react tutorial with detialed comments and little refactorings
-3. SOLID Priciple Python: Udemy
-4. Financial dashboard: NextJs Offical Tutorial
-5. React AI Resume Analyzer: https://www.youtube.com/watch?v=iYOz165wGkQ
-6. Next Js AI SaaS: https://www.youtube.com/playlist?list=PLRAV69dS1uWTvNby0b1w_boT35Onv5YWS
-7. NextJs AI SDK: https://www.youtube.com/playlist?list=PLC3y8-rFHvwhZHH2BksCOYAxLmYrQL__H
-8. StackOverflow Clone: https://www.youtube.com/playlist?list=PLRAV69dS1uWRJcxXk1omgcMI07ygMxSRl
-9. Theo: https://www.youtube.com/watch?v=c-hKSbzooAg&t=20s&pp=ygUNdGhlbyB0dXRvcmlhbA%3D%3D
+- [x] Tic-Tac-Toe: Official React tutorial with detailed comments and little refactorings
+- [ ] Thinking in React: Official React tutorial with detailed comments and little refactorings
+- [ ] SOLID Principle Python: Udemy
+- [ ] Financial dashboard: Next.js Official Tutorial
+- [ ] React AI Resume Analyzer: https://www.youtube.com/watch?v=iYOz165wGkQ
+- [ ] Next.js AI SaaS: https://www.youtube.com/playlist?list=PLRAV69dS1uWTvNby0b1w_boT35Onv5YWS
+- [ ] Next.js AI SDK: https://www.youtube.com/playlist?list=PLC3y8-rFHvwhZHH2BksCOYAxLmYrQL__H
+- [ ] StackOverflow Clone: https://www.youtube.com/playlist?list=PLRAV69dS1uWRJcxXk1omgcMI07ygMxSRl
+- [ ] Theo: https://www.youtube.com/watch?v=c-hKSbzooAg&t=20s&pp=ygUNdGhlbyB0dXRvcmlhbA%3D%3D
 
 # Databases
 1. PostgresSQL Concepts
-    - Schema and Datatypes
+    - [x] Schema and Datatypes
         [Integers, Numeric, Floating point, Money, NaN and inf, Casting types, characters]
-    - Advance Datatypes
-    - Indexing
-    - Advanced Indexing
-    - Understanding Query Plans
-    - Generating Results
-    - Advanced SQL
-    - Full Text Search
-    - Advanced JSON
-    - Vectors (pgvector)
-    - Internals
+    - [ ] Advance Datatypes
+    - [ ] Indexing
+    - [ ] Advanced Indexing
+    - [ ] Understanding Query Plans
+    - [ ] Generating Results
+    - [ ] Advanced SQL
+    - [ ] Full Text Search
+    - [ ] Advanced JSON
+    - [ ] Vectors (pgvector)
+    - [ ] Internals
 
-2. SQLit Concepts
+2. SQLite Concepts
 3. MongoDB Concepts
 
 4. DBMS
@@ -146,4 +146,6 @@
 1. Insta Reel generator using AI (Nextjs, FastAPI, AWS, FFMPeg, Gemini ...)
 2. SQL Query Optimizer using AI (Nextjs, FastAPI, Postgres ... )
 3. CI/CD Visualizer using AI
+4. Image/Video for product listing using AI
+
 
