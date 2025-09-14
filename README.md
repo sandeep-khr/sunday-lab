@@ -1,5 +1,3 @@
-﻿# sunday-lab projetcs
-
 # Web Dev
 1. Tic-Tac-Toe: Official react tutorial with detialed comments and little refactorings
 2. Thinking in React: Official react tutorial with detialed comments and little refactorings
@@ -148,3 +146,4 @@
 1. Insta Reel generator using AI (Nextjs, FastAPI, AWS, FFMPeg, Gemini ...)
 2. SQL Query Optimizer using AI (Nextjs, FastAPI, Postgres ... )
 3. CI/CD Visualizer using AI
+
