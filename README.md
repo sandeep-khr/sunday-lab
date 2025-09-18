@@ -1,32 +1,33 @@
-﻿# sunday-lab projetcs
-
 # Web Dev
-1. Tic-Tac-Toe: Official react tutorial with detialed comments and little refactorings
-2. Thinking in React: Official react tutorial with detialed comments and little refactorings
-3. SOLID Priciple Python: Udemy
-4. Financial dashboard: NextJs Offical Tutorial
-5. React AI Resume Analyzer: https://www.youtube.com/watch?v=iYOz165wGkQ
-6. Next Js AI SaaS: https://www.youtube.com/playlist?list=PLRAV69dS1uWTvNby0b1w_boT35Onv5YWS
-7. NextJs AI SDK: https://www.youtube.com/playlist?list=PLC3y8-rFHvwhZHH2BksCOYAxLmYrQL__H
-8. StackOverflow Clone: https://www.youtube.com/playlist?list=PLRAV69dS1uWRJcxXk1omgcMI07ygMxSRl
-9. Theo: https://www.youtube.com/watch?v=c-hKSbzooAg&t=20s&pp=ygUNdGhlbyB0dXRvcmlhbA%3D%3D
+- [x] Tic-Tac-Toe: Official React tutorial with detailed comments and little refactorings
+- [ ] Thinking in React: Official React tutorial with detailed comments and little refactorings
+- [ ] Financial dashboard: Next.js Official Tutorial
+- [ ] React AI Resume Analyzer: https://www.youtube.com/watch?v=iYOz165wGkQ
+- [ ] Next.js AI SaaS: https://www.youtube.com/playlist?list=PLRAV69dS1uWTvNby0b1w_boT35Onv5YWS
+- [ ] Next.js AI SDK: https://www.youtube.com/playlist?list=PLC3y8-rFHvwhZHH2BksCOYAxLmYrQL__H
+- [ ] StackOverflow Clone: https://www.youtube.com/playlist?list=PLRAV69dS1uWRJcxXk1omgcMI07ygMxSRl
+- [ ] Theo: https://www.youtube.com/watch?v=c-hKSbzooAg&t=20s&pp=ygUNdGhlbyB0dXRvcmlhbA%3D%3D
+
+
+# System Design
+- [ ] SOLID Principle using Python
+
 
 # Databases
 1. PostgresSQL Concepts
-    - Schema and Datatypes
+    - [x] Schema and Datatypes
         [Integers, Numeric, Floating point, Money, NaN and inf, Casting types, characters]
-    - Advance Datatypes
-    - Indexing
-    - Advanced Indexing
-    - Understanding Query Plans
-    - Generating Results
-    - Advanced SQL
-    - Full Text Search
-    - Advanced JSON
-    - Vectors (pgvector)
-    - Internals
+    - [ ] Advance Datatypes
+    - [ ] Indexing
+    - [ ] Understanding Query Plans
+    - [ ] Generating Results
+    - [ ] Advanced SQL
+    - [ ] Full Text Search
+    - [ ] Advanced JSON
+    - [ ] Vectors (pgvector)
+    - [ ] Internals
 
-2. SQLit Concepts
+2. SQLite Concepts
 3. MongoDB Concepts
 
 4. DBMS
@@ -49,64 +50,121 @@
 
 # Backend
 ## FastAPI
-    - 1. Python Types Intro
-    - 2. Concurrency and async / await
-    - 3. Environment Variables
-    - 4. Virtual Environments
-    - 5. Tutorial - User Guide
-    - 6. Advanced User Guide
-    - 7. Deployment
-    - 8. How To - Recipes
+
+- [x] Python Types Intro  
+- [ ] Concurrency and async / await  
+- [ ] Environment Variables  
+- [ ] Virtual Environments  
+
+#### Tutorial - User Guide
+- [ ] Basics
+- [ ] Path Parameters
+- [ ] Query Parameters
+- [ ] Request Body
+- [ ] Response Model
+
+#### Advanced User Guide
+- [ ] Dependencies
+- [ ] Security
+- [ ] Middleware
+- [ ] CORS
+- [ ] Testing
+
+#### Deployment
+- [ ] Uvicorn / Gunicorn
+- [ ] Docker
+- [ ] Cloud (Heroku, Render, etc.)
+
+#### How To - Recipes
+- [ ] OAuth2 with JWT
+- [ ] Background Tasks
+- [ ] WebSockets
+- [ ] SQL (Relational Databases)
+- [ ] NoSQL (MongoDB)
+
 
 ## Backend Concepts
-    1. HTTP Concepts
-    A. Communication Design Patterns
-        - Request response
-        - Synchronous vs Asynchronous workloads
-        - Push, Polling, Long Polling
-        - SSE, Pub/Sub
-        - h2 proxing vs Connection polling
-        - Stateful vs Stateless
-        - Sidecar Pattern
-    2. Routing
-    B. Protocols
-        - OSI Model
-        - Internet Protocol
-        - UDP
-        - TCP
-        - TLS
-        - HTTP/1.1
-        - HTTPS, TLS, Keys and Certificates
-        - WebSockets
-        - HTTP/2, HTTP/3
-        - gRPC
-        - WebRTC
-        - HTTPS over TCP with TLS 1.2/TLS1.3
-    3. Serialization
-    C. Backend Execution Patterns
-        - The Process and The Thread and how they compete for CPU time
-        - How The Backend Accepts Connections
-        - Reading and Sending Socket Data
-        - Nagle's Algorithm
-    D. Proxying and Laod balacing
-        - Proxy vs Reverse Proxy
-        - Layer 4 vs Layer 7 Load Balancers
-        - WebSocket Proxying
-    4. Authentication and Authorization
-    5. Validation and Tranformations
-    6. controller, service and repositories
-    7. REST API Design
-    8. caching
-    9. Task Queue and Backgroung Jobs
-    10. Elasticsearch
-    11. Error Handling
-    12. Logging, Monitoring and Observality
 
-    E. How ChatGPT uses Server Sent Events
-    F. How does the Kernel manage backend connections?
-    G. Running out of TCP Ports
+#### 1. HTTP Concepts
+- [ ] Communication Design Patterns  
+  - [ ] Request/Response  
+  - [ ] Synchronous vs Asynchronous workloads  
+  - [ ] Push, Polling, Long Polling  
+  - [ ] SSE (Server-Sent Events), Pub/Sub  
+  - [ ] HTTP/2 Proxying vs Connection Pooling  
+  - [ ] Stateful vs Stateless  
+  - [ ] Sidecar Pattern  
 
-## NodeJs
+#### 2. Routing
+
+#### 3. Protocols
+- [ ] OSI Model  
+- [ ] Internet Protocol (IP)  
+- [ ] UDP  
+- [ ] TCP  
+- [ ] TLS  
+- [ ] HTTP/1.1  
+- [ ] HTTPS, TLS, Keys and Certificates  
+- [ ] WebSockets  
+- [ ] HTTP/2  
+- [ ] HTTP/3  
+- [ ] gRPC  
+- [ ] WebRTC  
+- [ ] HTTPS over TCP with TLS 1.2 / 1.3  
+
+#### 4. Serialization
+
+#### 5. Backend Execution Patterns
+- [ ] The Process and The Thread and how they compete for CPU time  
+- [ ] How The Backend Accepts Connections  
+- [ ] Reading and Sending Socket Data  
+- [ ] Nagle's Algorithm  
+
+#### 6. Proxying and Load Balancing
+- [ ] Proxy vs Reverse Proxy  
+- [ ] Layer 4 vs Layer 7 Load Balancers  
+- [ ] WebSocket Proxying  
+
+#### 7. Authentication and Authorization
+
+#### 8. Validation and Transformations
+
+#### 9. Controllers, Services, and Repositories
+
+#### 10. REST API Design
+
+#### 11. Caching
+
+#### 12. Task Queues and Background Jobs
+
+#### 13. Elasticsearch
+
+#### 14. Error Handling
+
+#### 15. Logging, Monitoring, and Observability
+
+---
+
+#### Extra
+- [ ] How ChatGPT uses Server-Sent Events  
+- [ ] How the Kernel manages backend connections  
+- [ ] Running out of TCP Ports  
+
+---
+
+## Node.js
+
+- [ ] Event Loop & Concurrency Model (Official Docs)  
+- [ ] Modules & NPM (NodeSchool, Official Docs)  
+- [ ] Streams & Buffers (Node.js Design Patterns)  
+- [ ] File System & OS APIs 
+- [ ] HTTP Module & Building Servers  
+- [ ] Express.js (Official Docs)
+- [ ] Asynchronous Patterns: Callbacks, Promises, async/await 
+- [ ] Clusters & Worker Threads (Scaling Node apps)
+- [ ] Debugging & Performance (Node.js Official Guide) 
+- [ ] Testing (Jest / Mocha)
+- [ ] Deployment & Process Management (PM2, Docker)
 
 
 ## GO
@@ -144,7 +202,20 @@
 
     - Bit manipulation (10)
 
+# AI
+- [ ] Hugging Face - transformer models - https://huggingface.co/learn/llm-course/chapter1/1
+- [ ] Hugginh Face - using transformers
+
+- [ ] AI SDK Cookbook - https://ai-sdk.dev/cookbook
+- [ ] https://sebastianraschka.com/teaching/pytorch-1h/
+- [ ] https://karpathy.ai/zero-to-hero.html 
+
 # Micro SaaS
 1. Insta Reel generator using AI (Nextjs, FastAPI, AWS, FFMPeg, Gemini ...)
 2. SQL Query Optimizer using AI (Nextjs, FastAPI, Postgres ... )
 3. CI/CD Visualizer using AI
+4. Image/Video for product listing using AI
+
+
+
+
