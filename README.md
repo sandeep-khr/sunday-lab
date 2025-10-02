@@ -1,8 +1,7 @@
 # Web Dev
 - [x] Tic-Tac-Toe: Official React tutorial with detailed comments and little refactorings
-- [ ] Thinking in React: Official React tutorial with detailed comments and little refactorings
-- [ ] Financial dashboard: Next.js Official Tutorial
-- [ ] React AI Resume Analyzer: https://www.youtube.com/watch?v=iYOz165wGkQ
+- [X] Thinking in React: Official React tutorial with detailed comments and little refactorings
+- [x] Financial dashboard: Next.js Official Tutorial
 - [ ] Next.js AI SaaS: https://www.youtube.com/playlist?list=PLRAV69dS1uWTvNby0b1w_boT35Onv5YWS
 - [ ] Next.js AI SDK: https://www.youtube.com/playlist?list=PLC3y8-rFHvwhZHH2BksCOYAxLmYrQL__H
 - [ ] StackOverflow Clone: https://www.youtube.com/playlist?list=PLRAV69dS1uWRJcxXk1omgcMI07ygMxSRl
@@ -215,6 +214,7 @@
 2. SQL Query Optimizer using AI (Nextjs, FastAPI, Postgres ... )
 3. CI/CD Visualizer using AI
 4. Image/Video for product listing using AI
+
 
 
 
