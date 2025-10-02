@@ -9,6 +9,7 @@
 
 
 # System Design
+## LLD
 - [ ] SOLID Principle using Python
 
 
@@ -214,6 +215,7 @@
 2. SQL Query Optimizer using AI (Nextjs, FastAPI, Postgres ... )
 3. CI/CD Visualizer using AI
 4. Image/Video for product listing using AI
+
 
 
 
