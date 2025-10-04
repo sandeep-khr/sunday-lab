@@ -53,11 +53,11 @@
 
 - [x] Python Types Intro  
 - [x] Concurrency and async / await  
-- [ ] Environment Variables  
-- [ ] Virtual Environments  
+- [x] Environment Variables  
+- [x] Virtual Environments  
 
 #### Tutorial - User Guide
-- [ ] Basics
+- [x] Basics
 - [ ] Path Parameters
 - [ ] Query Parameters
 - [ ] Request Body
@@ -213,6 +213,7 @@
 2. SQL Query Optimizer using AI (Nextjs, FastAPI, Postgres ... )
 3. CI/CD Visualizer using AI
 4. Image/Video for product listing using AI
+
 
 
 
