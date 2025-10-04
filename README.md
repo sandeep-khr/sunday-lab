@@ -1,6 +1,6 @@
 # Web Dev
 - [x] Tic-Tac-Toe: Official React tutorial with detailed comments and little refactorings
-- [X] Thinking in React: Official React tutorial with detailed comments and little refactorings
+- [x] Thinking in React: Official React tutorial with detailed comments and little refactorings
 - [x] Financial dashboard: Next.js Official Tutorial
 - [ ] Next.js AI SaaS: https://www.youtube.com/playlist?list=PLRAV69dS1uWTvNby0b1w_boT35Onv5YWS
 - [ ] Next.js AI SDK: https://www.youtube.com/playlist?list=PLC3y8-rFHvwhZHH2BksCOYAxLmYrQL__H
@@ -49,10 +49,10 @@
     - 
 
 # Backend
-## FastAPI
+## FastAPI (fastapi.tiangolo.com/learn/)
 
 - [x] Python Types Intro  
-- [ ] Concurrency and async / await  
+- [x] Concurrency and async / await  
 - [ ] Environment Variables  
 - [ ] Virtual Environments  
 
@@ -215,6 +215,7 @@
 2. SQL Query Optimizer using AI (Nextjs, FastAPI, Postgres ... )
 3. CI/CD Visualizer using AI
 4. Image/Video for product listing using AI
+
 
 
 
