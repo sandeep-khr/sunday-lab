@@ -199,13 +199,11 @@
     - Graphs (30)
     - DP (40)
     - Greedy (15)
-
     - Bit manipulation (10)
 
 # AI
 - [ ] Hugging Face - transformer models - https://huggingface.co/learn/llm-course/chapter1/1
-- [ ] Hugginh Face - using transformers
-
+- [ ] Hugging Face - using transformers
 - [ ] AI SDK Cookbook - https://ai-sdk.dev/cookbook
 - [ ] https://sebastianraschka.com/teaching/pytorch-1h/
 - [ ] https://karpathy.ai/zero-to-hero.html 
@@ -215,6 +213,7 @@
 2. SQL Query Optimizer using AI (Nextjs, FastAPI, Postgres ... )
 3. CI/CD Visualizer using AI
 4. Image/Video for product listing using AI
+
 
 
 
