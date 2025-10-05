@@ -57,11 +57,11 @@
 - [x] Virtual Environments  
 
 #### Tutorial - User Guide
-- [x] Basics
-- [ ] Path Parameters
-- [ ] Query Parameters
-- [ ] Request Body
-- [ ] Response Model
+- [ ] Path Parameters, Query Parameters, Request Body, Request Body + Path + Query
+- [ ] Pydantic Models, Schema Extra, Example Data, Field, Form, and File Parameters, Request Forms and File Uploads, Body Updates and Nested Models
+- [ ] Response Model, Status Codes, Response Cookies, Headers, Path Operation Configuration, Dependencies (Intro + Classes + Sub-dependencies)
+- [ ] Security – Intro, OAuth2 Password Flow, JWT Tokens, Security Scopes
+- [ ] Middleware, CORS (Cross-Origin Resource Sharing), Background Tasks
 
 #### Advanced User Guide
 - [ ] Dependencies
@@ -213,6 +213,14 @@
 2. SQL Query Optimizer using AI (Nextjs, FastAPI, Postgres ... )
 3. CI/CD Visualizer using AI
 4. Image/Video for product listing using AI
+
+# Books
+1. Grokking Algorithms (Chapter 2/11)
+2. LLM-Engineers-Handbook (Chapter 2/13)
+3. Build a Large Language Model From Scratch (Chapter 1/...)
+4. AI Engineering
+5. Accidental CTO
+6. System Design Interview - An Insider's Guide
 
 
 
