@@ -1,0 +1,16 @@
+{
+  "name": "react-window",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@lottiefiles/dotlottie-react": "^0.17.5",
+    "react-window": "^2.2.1",
+    "react-window-infinite-loader": "^2.0.0"
+  }
+}
