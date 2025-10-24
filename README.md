@@ -1,8 +1,7 @@
 # Web Dev
 - [x] Tic-Tac-Toe: Official React tutorial with detailed comments and little refactorings
-- [ ] Thinking in React: Official React tutorial with detailed comments and little refactorings
-- [ ] Financial dashboard: Next.js Official Tutorial
-- [ ] React AI Resume Analyzer: https://www.youtube.com/watch?v=iYOz165wGkQ
+- [x] Thinking in React: Official React tutorial with detailed comments and little refactorings
+- [x] Financial dashboard: Next.js Official Tutorial
 - [ ] Next.js AI SaaS: https://www.youtube.com/playlist?list=PLRAV69dS1uWTvNby0b1w_boT35Onv5YWS
 - [ ] Next.js AI SDK: https://www.youtube.com/playlist?list=PLC3y8-rFHvwhZHH2BksCOYAxLmYrQL__H
 - [ ] StackOverflow Clone: https://www.youtube.com/playlist?list=PLRAV69dS1uWRJcxXk1omgcMI07ygMxSRl
@@ -10,6 +9,7 @@
 
 
 # System Design
+## LLD
 - [ ] SOLID Principle using Python
 
 
@@ -49,19 +49,19 @@
     - 
 
 # Backend
-## FastAPI
+## FastAPI (fastapi.tiangolo.com/learn/)
 
 - [x] Python Types Intro  
-- [ ] Concurrency and async / await  
-- [ ] Environment Variables  
-- [ ] Virtual Environments  
+- [x] Concurrency and async / await  
+- [x] Environment Variables  
+- [x] Virtual Environments  
 
 #### Tutorial - User Guide
-- [ ] Basics
-- [ ] Path Parameters
-- [ ] Query Parameters
-- [ ] Request Body
-- [ ] Response Model
+- [ ] Path Parameters, Query Parameters, Request Body, Request Body + Path + Query
+- [ ] Pydantic Models, Schema Extra, Example Data, Field, Form, and File Parameters, Request Forms and File Uploads, Body Updates and Nested Models
+- [ ] Response Model, Status Codes, Response Cookies, Headers, Path Operation Configuration, Dependencies (Intro + Classes + Sub-dependencies)
+- [ ] Security – Intro, OAuth2 Password Flow, JWT Tokens, Security Scopes
+- [ ] Middleware, CORS (Cross-Origin Resource Sharing), Background Tasks
 
 #### Advanced User Guide
 - [ ] Dependencies
@@ -199,13 +199,11 @@
     - Graphs (30)
     - DP (40)
     - Greedy (15)
-
     - Bit manipulation (10)
 
 # AI
 - [ ] Hugging Face - transformer models - https://huggingface.co/learn/llm-course/chapter1/1
-- [ ] Hugginh Face - using transformers
-
+- [ ] Hugging Face - using transformers
 - [ ] AI SDK Cookbook - https://ai-sdk.dev/cookbook
 - [ ] https://sebastianraschka.com/teaching/pytorch-1h/
 - [ ] https://karpathy.ai/zero-to-hero.html 
@@ -215,6 +213,19 @@
 2. SQL Query Optimizer using AI (Nextjs, FastAPI, Postgres ... )
 3. CI/CD Visualizer using AI
 4. Image/Video for product listing using AI
+
+# Books
+1. Grokking Algorithms (Chapter 2/11)
+2. LLM-Engineers-Handbook (Chapter 2/13)
+3. Build a Large Language Model From Scratch (Chapter 1/...)
+4. AI Engineering
+5. Accidental CTO
+6. System Design Interview - An Insider's Guide
+
+
+
+
+
 
 
 
