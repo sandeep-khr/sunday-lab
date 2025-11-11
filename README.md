@@ -7,6 +7,8 @@
 - [ ] StackOverflow Clone: https://www.youtube.com/playlist?list=PLRAV69dS1uWRJcxXk1omgcMI07ygMxSRl
 - [ ] Theo: https://www.youtube.com/watch?v=c-hKSbzooAg&t=20s&pp=ygUNdGhlbyB0dXRvcmlhbA%3D%3D
 
+# AI
+- [x] Open AI Agents SDK: https://openai.github.io/openai-agents-js/
 
 # System Design
 ## LLD
