@@ -28,7 +28,7 @@
     - [ ] Advanced JSON
     - [ ] Vectors (pgvector)
     - [ ] Internals
-
+[ ] Advent of SQL
 2. SQLite Concepts
 3. MongoDB Concepts
 
@@ -223,6 +223,7 @@
 4. AI Engineering
 5. Accidental CTO
 6. System Design Interview - An Insider's Guide
+
 
 
 
