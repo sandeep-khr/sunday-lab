@@ -2,13 +2,12 @@
 - [x] Tic-Tac-Toe: Official React tutorial with detailed comments and little refactorings
 - [x] Thinking in React: Official React tutorial with detailed comments and little refactorings
 - [x] Financial dashboard: Next.js Official Tutorial
-- [ ] Next.js AI SaaS: https://www.youtube.com/playlist?list=PLRAV69dS1uWTvNby0b1w_boT35Onv5YWS
 - [ ] Next.js AI SDK: https://www.youtube.com/playlist?list=PLC3y8-rFHvwhZHH2BksCOYAxLmYrQL__H
 - [ ] StackOverflow Clone: https://www.youtube.com/playlist?list=PLRAV69dS1uWRJcxXk1omgcMI07ygMxSRl
 - [ ] Theo: https://www.youtube.com/watch?v=c-hKSbzooAg&t=20s&pp=ygUNdGhlbyB0dXRvcmlhbA%3D%3D
 
 # AI
-- [x] Open AI Agents SDK: https://openai.github.io/openai-agents-js/
+- [ ] Open AI Agents SDK: https://openai.github.io/openai-agents-js/
 
 # System Design
 ## LLD
@@ -89,9 +88,9 @@
 
 #### 1. HTTP Concepts
 - [ ] Communication Design Patterns  
-  - [ ] Request/Response  
-  - [ ] Synchronous vs Asynchronous workloads  
-  - [ ] Push, Polling, Long Polling  
+  - [x] Request/Response  
+  - [x] Synchronous vs Asynchronous workloads  
+  - [x] Push, Polling, Long Polling  
   - [ ] SSE (Server-Sent Events), Pub/Sub  
   - [ ] HTTP/2 Proxying vs Connection Pooling  
   - [ ] Stateful vs Stateless  
