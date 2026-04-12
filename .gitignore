@@ -38,3 +38,13 @@ coverage/
 *.tgz
 *.swp
 *.bak
+
+# Xcode user data (ignore ALWAYS)
+xcuserdata/
+*.xcuserstate
+
+# macOS junk
+.DS_Store
+
+# Optional but recommended
+DerivedData/
