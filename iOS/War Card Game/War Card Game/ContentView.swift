@@ -8,6 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State var playercard = "card13"
+    @State var cpucard = "card10"
+    @State var playerscore = 0
+    @State var cpuscore = 0
+    
     var body: some View {
         ZStack{
             Image("background-plain")
@@ -21,15 +27,21 @@ struct ContentView: View {
                 // Cards
                 HStack{
                     Spacer()
-                    Image("card3")
+                    Image(playercard)
                     Spacer()
-                    Image("card11")
+                    Image(cpucard)
                     Spacer()
                 }
                 Spacer()
                 
                 // Button
-                Image("button")
+                Button {
+                    dealCards()
+                    
+                } label: {
+                    Image("button")
+                }
+                
                 Spacer()
                 
                 // Scores
@@ -39,7 +51,7 @@ struct ContentView: View {
                         Text("Player")
                             .font(.headline)
                             .padding(.bottom)
-                        Text("0")
+                        Text(String(playerscore))
                             .font(.largeTitle)
                     }
                     Spacer()
@@ -47,7 +59,7 @@ struct ContentView: View {
                         Text("CPU")
                             .font(.headline)
                             .padding(.bottom)
-                        Text("0")
+                        Text(String(cpuscore))
                             .font(.largeTitle)
                     }
                     Spacer()
@@ -59,6 +71,30 @@ struct ContentView: View {
             .padding()
             
         }
+    }
+    
+    func dealCards(){
+        // Randomize card values
+        var playerValue = Int.random(in: 2...14)
+        var cpuValue = Int.random(in: 2...14)
+        
+        // Update the card images
+        playercard = "card" + String(playerValue)
+        cpucard = "card" + String(cpuValue)
+        
+        // Calculate the score
+        if playerValue > cpuValue {
+            playerscore += 1
+        } else if cpuValue > playerValue {
+            cpuscore += 1
+        } else{
+            cpuscore+=1
+            playerscore+=1
+        }
+        
+        
+        // Update the score label
+        
     }
 }
 
