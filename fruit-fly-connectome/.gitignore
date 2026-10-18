@@ -1,0 +1,10 @@
+.venv/
+.venv-runtime/
+research/upstream/
+data/raw/
+data/cache/
+__pycache__/
+.pytest_cache/
+.DS_Store
+frontend/.sites-runtime/
+frontend/.git/

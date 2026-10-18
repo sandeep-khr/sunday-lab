@@ -1,0 +1,765 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Research & evidence · Money Follows Fly</title><link rel="stylesheet" href="style.css">
+<style>article{max-width:1080px;margin:auto;padding:35px 5% 70px;line-height:1.75}article h1{font-size:52px;line-height:1.1;margin:25px 0}article h2{font-size:30px;margin:45px 0 18px;color:var(--lime)}article h3{margin:30px 0 13px}article p{margin:16px 0;color:#c4cfd7}article a{color:var(--cyan);text-decoration:underline}article table{white-space:normal;display:block;overflow-x:auto;margin:23px 0;font-size:14px}article td{min-width:130px;vertical-align:top}article td:nth-child(n+3){font:inherit}article th{font-size:12px}article pre{padding:20px;background:#111e28;overflow-x:auto;border:1px solid var(--line);font:13px/1.8 var(--mono)}article code{font:13px var(--mono);color:#dfeeb2}article blockquote{border-left:2px solid var(--lime);padding-left:22px;margin:22px 0}.back{font:13px var(--mono)}@media(max-width:760px){article h1{font-size:39px}article h2{font-size:25px}article td{min-width:180px}}
+</style></head><body><article><a class="back" href="index.html">← BACK TO THE EXPERIMENT</a><h1>Money Follows Fly — research, implementation and measured results</h1>
+<p>Research checked 15–16 September 2026; implementation completed 16 September 2026.</p>
+<p><strong>Recommendation implemented:</strong> a delayed two-choice task using measured activity
+from a fixed FlyWire v783 model and <strong>32 trainable external readout weights</strong>.
+A detailed Flybody mesh makes the choices visible in a 3D arena. Its walking is
+authored animation. This is a computational demonstration, not an uploaded animal,
+a trained biological brain, or evidence that flies understand money.</p>
+<h2>A. Research summary</h2>
+<h3>The meme and what makes the experiment work</h3>
+<p>The source is Raj Shamani's <em>Figuring Out</em>, episode FO384 with Ravi Kishan,
+released <strong>22 July 2025</strong>. The official episode feed labels <strong>45:19 “Fame vs.
+Money.”</strong> Asked to choose recognition or money, Kishan chooses recognition:
+“Pehchaan. Money follows my brother.” Recognition/reputation comes first; money
+follows it. The experimental hook is the order of events, not understanding the
+sentence. <a href="https://podcasts.apple.com/au/podcast/ravi-kishan-on-politics-childhood-trauma-ego-pm-modi/id1501941375?i=1000718482108">Official episode and chapter list</a>.</p>
+<p>The older interview became a 2026 meme through short edits, exaggerated
+confidence, motivational irony and audience participation. An auditorium video
+from MIT ADT University in Pune shows students repeating the line; Kishan later
+responded by emphasizing reputation. These reports establish circulation, not
+an exhaustive earliest-post chronology. <a href="https://indianexpress.com/article/trending/trending-in-india/ravi-kishan-money-follows-my-brother-college-viral-video-10823654/">Pune auditorium report</a>,
+<a href="https://www.hindustantimes.com/htcity/cinema/ravi-kishan-reacts-to-his-viral-money-follows-my-brother-line-reputation-money-are-101786187486979.html">Kishan's response</a>.</p>
+<p>Variations include reaction edits, motivational captions and an AI-created
+<em>Friends</em> crossover. The crossover is an edit, not a real appearance. Some
+secondary summaries incorrectly paraphrase the choice as money; the original
+recognition-first meaning is the one used here.
+<a href="https://www.freepressjournal.in/entertainment/ravi-kishan-in-friends-ai-video-shows-actor-giving-money-follows-advice-to-joey-netizens-react-looks-real-goat-is-everywhere-video">AI crossover coverage</a>.</p>
+<p>T-Series announced a song for 11 September 2026. By the research date, its
+official catalogue listed <em>MONEY FOLLOWS MY BROTHER (2026)</em> and Apple Music's
+artist listing showed the released single. Thus “upcoming song” is stale wording
+for this report. Detailed credits and popularity counts were not independently
+verified. The demo embeds neither the song nor interview audio.
+<a href="https://www.tseries.com/">T-Series catalogue</a>,
+<a href="https://music.apple.com/us/artist/ravi-kishan/417977939">Apple Music artist listing</a>,
+<a href="https://www.moneycontrol.com/entertainment/ravi-kishan-s-viral-money-follows-my-brother-meme-turns-into-official-t-series-song-will-release-on-september-11-article-14025113.html">release announcement</a>.</p>
+<h3>MaleCNS: what was released</h3>
+<p>The complete male central nervous system reconstruction includes the <strong>brain
+and ventral nerve cord</strong>, <strong>166,691 neurons</strong> and <strong>11,691 annotated cell types</strong>.
+The approximately <strong>125 million synaptic contacts</strong> reported in the accompanying
+announcement are not 125 million distinct neuron-to-neuron pairs. Counts depend
+on inclusion and filtering rules. The peer-reviewed paper appeared in <em>Cell</em> on
+3 September 2026. Dataset <strong>v1.0 had already been released on 8 June 2026</strong>;
+the September paper is not the first public availability of the data.
+<a href="https://male-cns.janelia.org/">Official project</a>,
+<a href="https://male-cns.janelia.org/release/">release history</a>,
+<a href="https://research.google/blog/a-connectomics-milestone-mapping-the-complete-male-fruit-fly-brain/">Google Research announcement</a>.</p>
+<p>The primary paper is Berg et al., <em>Sexual dimorphism in the complete connectome
+of the Drosophila male central nervous system</em>, <em>Cell</em> 189, 5504–5526.e15,
+DOI <strong>10.1016/j.cell.2026.08.015</strong>. It enables male/female circuit comparison,
+including sex-specific pathways, rather than supplying a complete dynamical
+model of behaviour. The preprint DOI is 10.1101/2025.10.09.680999.
+<a href="https://research.google/pubs/sexual-dimorphism-in-the-complete-connectome-of-the-drosophila-male-central-nervous-system/">Official publication record</a>,
+<a href="https://pubmed.ncbi.nlm.nih.gov/41279223/">PubMed</a>,
+<a href="https://mrclmb.ac.uk/news-events/articles/first-complete-connectome-of-male-fly-central-nervous-system-allows-for-unprecedented-male-female-brain-comparison/">MRC LMB account</a>.</p>
+<p>MaleCNS provides structural connectivity and annotations, including predicted
+transmitter identities. It does not directly measure every synaptic efficacy,
+receptor, membrane time constant, plasticity rule or behavioural objective.
+Public bulk exports are available without a neuPrint token; authenticated
+neuPrint queries are a separate access route. Large connectivity exports are
+around gigabyte scale. <a href="https://male-cns.janelia.org/download/">Official downloads</a>.</p>
+<p><strong>FlyWire FAFB differs:</strong> it reconstructs an adult female brain, without the
+complete VNC. This V1 uses FlyWire v783, not MaleCNS. Labels and root IDs cannot
+be interchanged between their versions or animals.
+<a href="https://doi.org/10.1038/s41586-024-07558-y">FlyWire primary paper</a>.</p>
+<h3>Three primary modelling papers</h3>
+<table>
+<thead>
+<tr>
+<th>Work</th>
+<th>Model and evidence</th>
+<th>Consequence for this project</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shiu et al., <em>A Drosophila computational brain model reveals sensorimotor processing</em>, Nature 634, 210–219 (2024), DOI 10.1038/s41586-024-07763-9</td>
+<td>Whole-brain spiking model using connectomic wiring, predicted transmitter signs and shared neuron parameters. Sensory stimulation produces downstream responses; predictions concerning feeding/grooming and sensory convergence are compared with experimental perturbations and recordings.</td>
+<td>Strong starting point for sensory propagation. It does <strong>not</strong> establish a reward-learning rule or a whole embodied animal.</td>
+</tr>
+<tr>
+<td>Lappalainen et al., <em>Connectome-constrained networks predict neural activity across the fly visual system</em>, Nature 634, 1132–1140 (2024), DOI 10.1038/s41586-024-07939-3</td>
+<td>Differentiable visual network, tiled retinotopic architecture, passive point-neuron dynamics and rectified graded transmission. Connectivity constrains topology and relative weights; remaining type-shared parameters are optimized on optic flow. Ensemble predictions are compared with visual physiology.</td>
+<td>Excellent future sensory frontend if visual input becomes a scientific requirement. Its responses arise from anatomy <strong>and task optimization</strong>, not wiring alone.</td>
+</tr>
+<tr>
+<td>Vaxenburg et al., Flybody, Nature 643, 1312–1320 (2025), DOI 10.1038/s41586-025-09029-4</td>
+<td>Anatomically detailed MuJoCo body with learned locomotion controllers for walking/flight.</td>
+<td>Reuse anatomical geometry for presentation. Running a learned physical gait would be a separate, more expensive extension.</td>
+</tr>
+</tbody>
+</table>
+<p>Primary sources: <a href="https://doi.org/10.1038/s41586-024-07763-9">Shiu paper</a>,
+<a href="https://edmond.mpdl.mpg.de/dataset.xhtml?persistentId=doi:10.17617/3.CZODIW">Shiu data and supplementary archive</a>,
+<a href="https://github.com/philshiu/Drosophila_brain_model">Shiu code</a>,
+<a href="https://www.nature.com/articles/s41586-024-07939-3">FlyVis paper</a>,
+<a href="https://doi.org/10.1038/s41586-025-09029-4">Flybody paper</a>.</p>
+<p>The Shiu repository contains both v630 and v783 resources. This implementation
+explicitly chooses v783. The original Brian2 implementation uses its linear
+integration method; flypoke is a separate lightweight numerical implementation,
+so bitwise equivalence is not asserted. The paper's supplement includes
+behavioural results and sensitivity analyses, including weight perturbations;
+these are not a validation of our new reward task. Some publisher/PMC full-text
+routes were blocked during the audit; bibliographic records, accessible indexed
+paper material, official repositories and available supplements were used.</p>
+<h2>B. Existing-project landscape</h2>
+<p>Repository code and examples were inspected for the main implementation
+candidates. The wider landscape below is based on linked project documentation;
+its performance statements are author reports, not replications by this project.</p>
+<h3>Implementation candidates</h3>
+<table>
+<thead>
+<tr>
+<th>Repository</th>
+<th>What it supplies; what was inspected</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/vshapenko/flypoke">flypoke</a></td>
+<td>Small MIT NumPy/SciPy simulator. <code>data.py</code> handles annotations/sparse graph, <code>sim.py</code> implements LIF, <code>cli.py</code> supplies selection/stimulation/silencing and verified MN9 IDs. <code>run(Network, stimuli, Params, seed)</code> returns spikes and rates.</td>
+<td>Reuse unmodified, pinned to <code>24814fe83224ca2d25c116c1107440b877b07762</code>. Add a data adapter and an external learner.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/philshiu/Drosophila_brain_model">Shiu original</a></td>
+<td>Brian2 implementation, experiments and original v783 connection table. Its model has fixed wiring, transmitter sign assumptions and an empirical global synaptic scale.</td>
+<td>Use its pinned connection table; retain as the scientific reference. Avoid reimplementing all experiments.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/ShunyaResearch/drosophila-connectome-experiments">ShunyaResearch experiments</a></td>
+<td>Brian2 reproduction with neuron queries and sugar-response work. Documented v630 milestone, with v783/body work not all validated.</td>
+<td>Useful sanity-check and reproducibility reference. Its runtime/results should not be copied as our own.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/TuragaLab/flyvis">FlyVis</a></td>
+<td>PyTorch differentiable vision. Inspected network/dynamics modules and pretrained-network, moving-edge, custom-stimulus and stimulus-optimization examples.</td>
+<td>Defer: abstract cues do not require a visual pathway.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/sjcabs/flyvis_tutorial">FlyVis tutorial</a></td>
+<td>Guided pretrained-model exploration, response embeddings, clustering and gradient-based stimulus optimization.</td>
+<td>Future workflow for visual cue robustness; not a reward controller by itself.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/TuragaLab/flybody">Flybody</a></td>
+<td>MuJoCo body, detailed segmented meshes and RL walking/flight examples. Heavy training dependencies are separate from geometry.</td>
+<td>User's video steering justified reusing its Apache-2.0 meshes. MuJoCo is needed only to rebuild the converted asset, not run V1.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/vaibhavkedarisetti/fruit-fly-lab">Fruit Fly Lab</a></td>
+<td>Interactive brain simulation with telemetry, silencing and provenance-oriented UI.</td>
+<td>Learn from its controls and source labels; do not treat the entire behavioural interface as biologically validated.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/snedea/flybrain">FlyBrain</a></td>
+<td>Browser WebGL point rendering and a worker-based simulator, plus engineered behavioural mappings. Inspected <code>neuro-renderer.js</code>, <code>sim-worker.js</code>, <code>fly-logic.js</code>.</td>
+<td>Useful browser architecture. Authored mappings must remain visible in our claims.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/lixiang1076/fly-brain">fly-brain</a></td>
+<td><code>dopamine_learning.py</code> changes active KC→MBON weights with broad reward/punishment multipliers; <code>fast_learning.py</code> keeps per-KC valence scores.</td>
+<td>Do not copy this as measured dopamine physiology. Timing-, compartment- and receptor-specific biology is missing from a global multiplier.</td>
+</tr>
+</tbody>
+</table>
+<p>FlyVis models roughly 45,669 units in 64 types across 721 retinotopic columns,
+with about 1.51 million connections in its tiled architecture. Its pretrained
+ensemble, moving-edge probes and maximally exciting stimulus optimization make
+sense for questions about vision. They add substantial machinery to a task
+whose sensory identity can be specified directly. See the
+<a href="https://www.nature.com/articles/s41586-024-07939-3">primary paper</a> for its
+training and validation scope.</p>
+<h3>Projects in awesome-fly</h3>
+<p>The <a href="https://github.com/cobanov/awesome-fly">awesome-fly index</a> is a discovery
+list, not a validation authority. Each project needs its own methods audit.</p>
+<table>
+<thead>
+<tr>
+<th>Project</th>
+<th>Connectome/environment interface</th>
+<th>Learning and evidence relevant here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/nftechie/doomfly">Doomfly</a></td>
+<td>MaleCNS activity decoded into Doom actions</td>
+<td>Fixed readouts and plasticity experiments; its reported KC→MBON learning attempt includes failed validation. It does not justify a general learning claim.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/ornata/fly">Fly64</a></td>
+<td>Sensory/motor interface to Mario</td>
+<td>Authored mappings and a simulation-timescale proxy. A whole-body graphic does not establish learned locomotion or game understanding.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/MarkUnthank/flyhard">Flyhard</a></td>
+<td>Connectome-linked steering in a driving-like environment</td>
+<td>Author reports an RL pilot using a requested steering angle. Distinguish that interface from learning to drive from pixels.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/jonatasperaza/flypong">FlyPong</a></td>
+<td>Subset of fly network linked to Pong</td>
+<td>Reward-modulated plasticity experiments include negative learning findings. A useful warning against equating an update rule with success.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/tolatolatop/fly-chess">Fly Chess</a></td>
+<td>FlyWire activity decoded into chess choices through Rust/WASM</td>
+<td>Fixed, untrained readout; game rules and legal actions are external.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/liuzihe02/fly-craftax">fly-craftax</a></td>
+<td>Fixed neural substrate with a PPO-trained downstream controller</td>
+<td>Close conceptual prior art for learning outside a fixed connectome; prototype status matters.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/cobanov/flyjump">Fly Dino</a></td>
+<td>Small MaleCNS-derived circuit linked to jump decisions</td>
+<td>Current documentation adds a 243-parameter external readout trained with CEM, while its 80-neuron circuit stays fixed. This is additional direct prior art for a small learned readout.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/DenisSergeevitch/desktop-fly">DesktopFly</a></td>
+<td>Desktop embodiment with fly circuit components</td>
+<td>Art/interaction and locomotor mappings; a body on screen is distinct from validated sensorimotor closure.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/tel-0s/flyverse-core">flyverse</a></td>
+<td>Hybrid dynamics and an embodied environment</td>
+<td>Explicit engineered components and negative controls are valuable. More complex than this V1.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/Apolotary/fly-lab">Fly Lab</a></td>
+<td>Neural activity and a small trained musical/gesture readout</td>
+<td>Its documented small readout and authored gestures illustrate why body motion and neural learning need separate descriptions.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/nftechie/stonkfly">Stonkfly</a></td>
+<td>Visual/chart signals decoded into paper-trading actions</td>
+<td>Dopamine-inspired updates do not establish reliable learning or profitable finance. Our rupees are fictional reward units.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/jtc268/fruit-fly-fashion">Fruit Fly Fashion</a></td>
+<td>Neural simulation drives visual-art placement and transformations</td>
+<td>Creative readout and reproducible art, not evidence that a fly learned aesthetic judgement.</td>
+</tr>
+</tbody>
+</table>
+<p>The user's <a href="https://www.youtube.com/shorts/BsuCQHeGkxo">video reference</a> was
+visually inspected: a rendered fly moves through a rhythm-game scene with neural
+activity beside it. That visual presentation is achievable. Its short caption
+does not, on its own, establish the details of the learning mechanism. We adopted
+the visible body/environment idea and explicitly label our own mechanism.</p>
+<h3>Novelty assessment</h3>
+<p>Searches covered Drosophila connectome reinforcement learning, reward,
+delayed reward, temporal difference, value learning, economic/choice tasks,
+MaleCNS dopamine/plasticity, the requested repositories and arXiv. Direct Google
+Scholar and Semantic Scholar search pages were inaccessible; site-indexed
+searches supplemented them. This is a bounded audit, not evidence of absence.</p>
+<p>Prior work already combines connectomes and reinforcement learning. For example,
+<a href="https://arxiv.org/abs/2602.17997">FlyGM, arXiv:2602.17997</a> studies fly-derived
+graph policies for locomotion and compares graph/topology baselines. It is a
+preprint. Fly-craftax and Fly Lab further rule out a broad “first fixed fly brain
+with a learned readout” claim.</p>
+<p>Fly learning, dopamine timing, value and reward history also have substantial
+biological/computational prior work:
+<a href="https://doi.org/10.1016/j.cell.2019.05.040">Handler et al., Cell (2019)</a>,
+<a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1009205">heterogeneous dopamine models (2021)</a>,
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8975552/">incentive circuit model (2022)</a>,
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10523640/">reward expectations and operant matching (2023)</a>.
+These support more careful future plasticity models, not our particular
+32-weight rule. Timing-dependent KC/MBON plasticity can have opposite directions;
+“reward strengthens every active synapse” is not a sufficient account.</p>
+<p><strong>Defensible contribution:</strong> a culturally legible delayed-reward task, inspectable
+controller boundaries, paired controls, downloadable measured data and visible
+failure cases. A stronger scientific contribution would require a new hypothesis,
+matched topology nulls, independent neural trials, multiple circuit selections
+and biological validation. No first-in-field claim is made.</p>
+<h2>C. Recommended experiment</h2>
+<p>Each episode offers two abstract cues, displayed as Pehchaan and Paisa. A single
+decision chooses an option. By default, Pehchaan gives one reputation token and
+one follower, then ₹100 at tick 5. Paisa gives ₹10 at tick 0. The token reward
+weights default to zero; they cannot secretly force the recognition preference.
+Every episode has the same abstract horizon, delay + 1 ticks.</p>
+<p>The scientific question is: <strong>can a small external learner use fixed neural
+responses to fit this reward mapping, and how does it fail under delay,
+changed input intensity and reversal?</strong> The measured answer is “yes on the easy
+mapping, with poor robustness.” The brain wiring remains fixed throughout.</p>
+<table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>What changes</th>
+<th>Permitted claim</th>
+<th>V1 decision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A. Fixed connectome + readout</td>
+<td>A named external decoder</td>
+<td>Learning from fixed connectome-derived features</td>
+<td>Implemented; simplest auditable choice</td>
+</tr>
+<tr>
+<td>B. Dopamine-inspired plastic synapses</td>
+<td>Selected modeled KC→MBON or other synapses</td>
+<td>Learning in a specified plastic circuit model, subject to biological validation</td>
+<td>Defer until compartments, signs, timing and controls are specified</td>
+</tr>
+<tr>
+<td>C. External RL policy</td>
+<td>Policy/readout parameters optimized through reward</td>
+<td>An RL agent uses a connectome substrate</td>
+<td>Broader family containing A; PPO is unnecessary for this bandit</td>
+</tr>
+</tbody>
+</table>
+<p>Anatomical wiring, assumed dynamics, learned decoder, animated body and authored
+reward schedule are five separate components. None should inherit the biological
+credibility of the others automatically.</p>
+<h2>D. Scientific formulation</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Exact implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>State</td>
+<td>Presented cue pair, randomized left/right placement, episode phase and pending payout tick. One action per episode.</td>
+</tr>
+<tr>
+<td>Sensory input</td>
+<td>Two disjoint sets of 128 annotated olfactory sensory neurons, selected with NumPy seed 810. Poisson stimulation at 150 Hz for 250 ms. These are artificial patterns, not natural odours, pictures, speech or words.</td>
+</tr>
+<tr>
+<td>Neural model</td>
+<td>Fixed flypoke LIF dynamics on 139,248 retained v783 neurons and 2,700,429 directed pairs after contact aggregation and a five-contact threshold.</td>
+</tr>
+<tr>
+<td>Neural parameters</td>
+<td>dt .1 ms; rest/reset −52 mV; threshold −45 mV; membrane time constant 20 ms; synaptic time constant 5 ms; refractory 2.2 ms; delay 1.8 ms; global synaptic scale .275 mV. GABA/Glu assumed inhibitory, other predicted classes positive.</td>
+</tr>
+<tr>
+<td>Features</td>
+<td>Top 32 downstream mean-rate neurons selected using calibration responses only. Directly stimulated neurons are excluded. Calibration max scaling followed by per-response L2 normalization.</td>
+</tr>
+<tr>
+<td>Action</td>
+<td>Shared value function scores the two observed feature vectors; selected cue maps to LEFT/RIGHT. Ties are randomized. Position invariance is engineered by this shared decoder.</td>
+</tr>
+<tr>
+<td>Reward</td>
+<td>Scalar fictional money plus optional token reward. Payout probability is 1/.8/.55 for easy/medium/hard, equally applied to both choices.</td>
+</tr>
+<tr>
+<td>Plasticity</td>
+<td>Only 32 external linear weights. No connectome weight, dopamine neuron or biological synapse learns.</td>
+</tr>
+<tr>
+<td>Algorithm</td>
+<td>ε-greedy choice, ε=.2 during training; normalized least-mean-squares update toward discounted episodic return, learning rate .2. Evaluation is greedy with random tie-breaking.</td>
+</tr>
+<tr>
+<td>Metrics</td>
+<td>Held-out optimal-choice rate, pehchaan rate, money, discounted return, expected regret, rolling training rate, reversal recovery and input-intensity transfer.</td>
+</tr>
+</tbody>
+</table>
+<p>With bonus B and cash M arriving at tick d:</p>
+<pre><code class="language-text">G = B + γ^d M
+V(cue) = w · x(cue)
+w ← w + 0.2 × (G/100 − w·x) × x / max(x·x, 10⁻⁹)
+</code></pre>
+<p>The external learner retains the chosen feature until payout. A no-buffer control
+removes delayed cash from the learnable return; cash is still counted in the
+environment. Immediate bonuses can still update the learner. This ablation
+tests an engineered credit-assignment mechanism, not a measured memory trace.
+Because there are no intervening actions, this is a <strong>delayed contextual bandit</strong>,
+not a demonstration of temporal planning or multi-step TD learning.</p>
+<p>The neural and task clocks are separate: 250 biological-model milliseconds per
+cached response versus abstract reward ticks. Python completes the event list
+within one episode call; the browser replays it and commits learned weights and
+totals only after the displayed payout sequence completes. Playback speed has
+no effect on reward discounting.</p>
+<p>For each graph there are six calibration simulations and 16 trials per cue per
+train/test/transfer split. Train seeds begin at 2000; test at 4000; transfer at
+6000. Transfer uses 120 Hz. Finite response banks are sampled with replacement:
+4,000 held-out choices are not 4,000 independent neural simulations. Calibration
+never sees reward labels. Cue/label assignment is counterbalanced by learner-seed
+parity; side placement is randomized every episode.</p>
+<h2>E. Technical architecture</h2>
+<pre><code class="language-mermaid">flowchart TD
+  D[Versioned FlyWire contacts and annotations] --&gt; N[Fixed flypoke LIF simulation in Python]
+  S[Artificial ORN stimulus] --&gt; N
+  N --&gt; V[Feeding sanity check and split response banks]
+  V --&gt; X[Recorded neural features]
+  X --&gt; R[32-weight value readout]
+  R --&gt; A[Choose cue and map to left or right]
+  A --&gt; E[Authored delayed-reward environment]
+  E --&gt; L[Discounted return at payout]
+  L --&gt; R
+  A --&gt; B[Flybody mesh with authored gait]
+  X --&gt; U[Schematic neural activity view]
+  E --&gt; O[Ledger, tests, curves and JSON export]
+</code></pre>
+<p>No live Python server or GPU is needed to use the website. A static ES-module
+frontend hosts the response bank, baseline results and locally bundled Three.js.
+The simulation adapter is Python/NumPy/SciPy. It consumes the Shiu authors'
+v783 table by exact root ID, rather than mixing dataset index conventions.</p>
+<p>Why cache? Recomputing hundreds of milliseconds of 139k-cell activity per browser
+choice adds latency and operational complexity. Caching makes the live external
+learning cheap and inspectable, at the cost of finite sensory variability.
+There is no synthetic replacement if the measured response bank is missing.</p>
+<h2>F. MVP sequence and compute</h2>
+<ol>
+<li>Audit the biological model and data versions; record the decision before code.</li>
+<li>Download and hash-check the two source files; build a signed sparse graph.</li>
+<li>Check spontaneous silence, sugar-driven MN9 activation and bitter suppression.</li>
+<li>Generate independent calibration/train/test/transfer responses.</li>
+<li>Run the small CLI learner and six baseline controllers.</li>
+<li>Run delay, cue-buffer ablation and reversal experiments over 20 learner seeds.</li>
+<li>Expose the same algorithm in the browser; verify Python/JavaScript parity.</li>
+<li>Animate the selected choice with Flybody geometry and show all evidence.</li>
+</ol>
+<p>All eight steps are implemented. The cached CLI uses Python's standard library;
+the full preparation pipeline needs the pinned scientific dependencies. Measured
+bank preparation took <strong>169.7 seconds</strong> on this arm64 Mac/Python 3.12 run; the
+cached experiment suite took <strong>2.26 seconds</strong>. These timings exclude data
+download and asset conversion, and are not cross-machine benchmarks. GPU usage
+was zero. Peak RAM was not profiled; 8–16 GB is a planning estimate for rebuilding
+the sparse data, not a measured minimum. The deployed static output is about
+6–7 MB. Native meshes were simplified for the web.</p>
+<p>See the root <code>README.md</code> for exact commands and pinned data provenance. The
+website works from committed assets without installing MuJoCo. Optional mesh
+rebuilding uses MuJoCo only for coordinate resolution and folded-wing posture.</p>
+<h2>G. Interactive visualization</h2>
+<p>The main view puts a recognizable six-legged fly inside an arena. Cyan and lime
+reward zones correspond to the randomized choice cards. “Follow fly” gives a
+close camera; drag rotates the arena. “Watch 1 choice” runs a frozen test trial,
+slow enough to see walking, waiting and payout. “Train” performs 300 choices;
+fast and slow playback use the same learning algorithm.</p>
+<p>Below the arena, 256 selected neuron identities are drawn in <strong>schematic</strong>
+positions. Their displayed rates, spike count and active-neuron count come from
+the sampled trial. The graph shows up to 500 strongest retained edges between those
+cells. This is not an anatomical reconstruction or live full-brain simulation.</p>
+<p>Controls expose controller type, immediate/delayed amounts, delay, discount,
+payout probability, seed, token values, cue retention and reversal. Changing
+ordinary task settings resets training; reversal preserves learned weights.
+The ledger records paid episodes, the graph shows rolling optimal choices, and
+before/after evaluations freeze weights. Saved suite results are clearly
+separated from the user's current run. Export includes source hashes, seed,
+phase configurations, choices and weights.</p>
+<h2>H. Repository structure</h2>
+<pre><code class="language-text">Fruit Fly Connectome/
+├── brain/           # source download, data adapter, LIF preparation
+├── environment/     # reward events and expected returns
+├── training/        # reproducible RNG, readouts, evaluation
+├── experiments/     # baselines, delay/ablation/reversal suite
+├── frontend/dist/   # static site, 3D arena, neural view, measured banks
+├── data/            # manifest; downloaded raw files ignored
+├── results/         # measured validation, individual and suite JSON
+├── scripts/         # anatomical asset conversion and report rendering
+├── tests/           # scientific invariants and cross-runtime parity
+├── docs/            # decision log, research and launch material
+├── train.py
+├── requirements.txt
+└── README.md
+</code></pre>
+<h2>I. Exact code and reuse boundaries</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>brain/fetch_data.py</code></td>
+<td>Download two public files; verify SHA-256 before replacing local data.</td>
+</tr>
+<tr>
+<td><code>brain/prepare.py</code></td>
+<td>ID-safe adapter, sparse threshold/sign conversion, feeding check, calibrated features and split response bank.</td>
+</tr>
+<tr>
+<td><code>environment/task.py</code></td>
+<td>Immutable task configuration, expected return and tick-stamped reward events.</td>
+</tr>
+<tr>
+<td><code>training/core.py</code></td>
+<td>Shared seeded RNG, 32-weight readout, 33-parameter MLP, training and frozen evaluation.</td>
+</tr>
+<tr>
+<td><code>train.py</code></td>
+<td>Small runnable terminal experiment and JSON output.</td>
+</tr>
+<tr>
+<td><code>experiments/run_suite.py</code></td>
+<td>Six baselines, 20 seeds, delay crossover, cue-buffer ablation and reversal.</td>
+</tr>
+<tr>
+<td><code>frontend/dist/engine.js</code></td>
+<td>Algorithmically matched browser implementation, covered by parity tests.</td>
+</tr>
+<tr>
+<td><code>frontend/dist/app.js</code></td>
+<td>Experiment state, delayed playback, controls, measured plots and export.</td>
+</tr>
+<tr>
+<td><code>frontend/dist/arena.js</code></td>
+<td>Rendering of anatomical geometry and authored gait/path.</td>
+</tr>
+<tr>
+<td><code>frontend/dist/brain-view.js</code></td>
+<td>Sampled recorded rates and edges in a schematic point diagram.</td>
+</tr>
+<tr>
+<td><code>scripts/convert_fly.py</code></td>
+<td>Simplify and convert upstream Flybody meshes, preserving body hierarchy and source/license metadata.</td>
+</tr>
+<tr>
+<td><code>tests/test_experiment.py</code></td>
+<td>Timing, reversal, ablation, held-out splits, evaluation immutability, disconnected control, six-engine parity and asset bounds.</td>
+</tr>
+</tbody>
+</table>
+<p>The neural simulator remains upstream code. No FlyVis, PPO, robot control or
+claimed biological dopamine mechanism has been quietly added.</p>
+<h2>J. Experiment plan and actual results</h2>
+<h3>Feeding sanity check</h3>
+<p>Three neural seeds per condition, 1 s simulations and 150 Hz stimulation:</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th style="text-align:right">Right MN9 mean Hz</th>
+<th style="text-align:right">Left MN9 mean Hz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No stimulus</td>
+<td style="text-align:right">0.00</td>
+<td style="text-align:right">0.00</td>
+</tr>
+<tr>
+<td>Sugar</td>
+<td style="text-align:right">149.67</td>
+<td style="text-align:right">115.33</td>
+</tr>
+<tr>
+<td>Bitter</td>
+<td style="text-align:right">0.00</td>
+<td style="text-align:right">0.00</td>
+</tr>
+<tr>
+<td>Sugar + bitter</td>
+<td style="text-align:right">16.67</td>
+<td style="text-align:right">8.33</td>
+</tr>
+</tbody>
+</table>
+<p>This validates the expected qualitative sign in this pipeline; it is not a
+fresh experimental measurement or an exact replication of every number in the
+paper. The two verified MN9 IDs are recorded in <code>results/feeding_validation.json</code>.</p>
+<h3>Default task: 300 training + 200 frozen test choices per learner seed</h3>
+<p>20 learner seeds, one anatomy, one randomized graph. ± is standard deviation
+across learner seeds, not uncertainty across animals.</p>
+<table>
+<thead>
+<tr>
+<th>Controller</th>
+<th style="text-align:right">Test optimal-choice rate</th>
+<th style="text-align:right">Mean money per test</th>
+<th style="text-align:right">120 Hz transfer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Random</td>
+<td style="text-align:right">51.78 ± 3.76%</td>
+<td style="text-align:right">₹56.60</td>
+<td style="text-align:right">50.03%</td>
+</tr>
+<tr>
+<td>Raw-cue MLP, 33 parameters</td>
+<td style="text-align:right">100.00 ± 0.00%</td>
+<td style="text-align:right">₹100.00</td>
+<td style="text-align:right">100.00%</td>
+</tr>
+<tr>
+<td>Fixed connectome, zero frozen readout</td>
+<td style="text-align:right">51.78 ± 3.76%</td>
+<td style="text-align:right">₹56.60</td>
+<td style="text-align:right">50.03%</td>
+</tr>
+<tr>
+<td>Connectome + 32 learned weights</td>
+<td style="text-align:right"><strong>99.38 ± 0.53%</strong></td>
+<td style="text-align:right"><strong>₹99.44</strong></td>
+<td style="text-align:right"><strong>56.98%</strong></td>
+</tr>
+<tr>
+<td>Randomized network + 32 weights</td>
+<td style="text-align:right">100.00 ± 0.00%</td>
+<td style="text-align:right">₹100.00</td>
+<td style="text-align:right">100.00%</td>
+</tr>
+<tr>
+<td>Disconnected downstream signal</td>
+<td style="text-align:right">51.78 ± 3.76%</td>
+<td style="text-align:right">₹56.60</td>
+<td style="text-align:right">50.03%</td>
+</tr>
+</tbody>
+</table>
+<p>The connectome readout learns the default mapping, but <strong>shows no connectome
+advantage</strong>. The fixed zero-weight baseline is deliberately weak and equivalent
+to random tie-breaking. The disconnected case analytically replaces downstream
+features with zeros; it is not a separately simulated damaged animal. The MLP
+sees raw cue identity, so its transfer performance is not a test of sensory
+robustness. The random-network null permutes target slots and then coalesces
+duplicates; it is not an exact degree-preserving simple-graph rewire. These
+controls diagnose a simple learning pipeline, not topology superiority.</p>
+<h3>Delay crossover and cue retention</h3>
+<p>Use ₹25 delayed, ₹10 immediate and γ=.85, so the optimal answer changes with
+delay. This prevents “always choose Pehchaan” from passing every condition.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Delay</th>
+<th>Better choice</th>
+<th style="text-align:right">Intact buffer: optimal tests</th>
+<th style="text-align:right">No buffer: optimal tests</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">0</td>
+<td>Pehchaan</td>
+<td style="text-align:right">99.33%</td>
+<td style="text-align:right">99.33%</td>
+</tr>
+<tr>
+<td style="text-align:right">1</td>
+<td>Pehchaan</td>
+<td style="text-align:right">99.30%</td>
+<td style="text-align:right">24.30%</td>
+</tr>
+<tr>
+<td style="text-align:right">5</td>
+<td>Pehchaan</td>
+<td style="text-align:right">91.10%</td>
+<td style="text-align:right">24.30%</td>
+</tr>
+<tr>
+<td style="text-align:right">10</td>
+<td>Paisa</td>
+<td style="text-align:right">99.20%</td>
+<td style="text-align:right">75.70%</td>
+</tr>
+</tbody>
+</table>
+<p>At tick 5, 25 × .85⁵ ≈ 11.09, slightly above 10; at tick 10 it is ≈4.92.
+The near-tie condition is harder. No-buffer performance shows what the external
+cue retention contributes. It does not identify the corresponding biological
+memory substrate.</p>
+<h3>Reward reversal</h3>
+<p>After 300 default training episodes, swap the money branches and train another
+300 while preserving the weights. Mean frozen-test optimal-choice rate is only
+<strong>30.88%</strong>, with <strong>41.74 percentage-point SD</strong>. Only <strong>3/20</strong> seeds reach the
+predefined rolling-window criterion of at least 80% optimal choices over 25
+episodes, first at 168, 266 or 268 post-reversal episodes.</p>
+<p>This is a failure of reliable reversal within the tested budget. A transient
+rolling criterion is not sustained recovery. Do not market this as a fly that
+adapted robustly. The finite features, linear decoder and reward scaling are
+possible contributors; no causal attribution has been established.</p>
+<h3>What would justify a stronger study?</h3>
+<p>Pre-register comparison budgets, several cue selections and shuffled graphs;
+add matched random features, a trained-then-frozen readout and matched-input MLP;
+generate fresh neural test trials; sweep intensity/noise; analyze feature
+conditioning; compare credit-assignment rules at fixed parameter budgets;
+repeat on independent anatomy or MaleCNS; then seek physiological predictions.
+Select these extensions for a hypothesis, not to hide the current negative result.</p>
+<h2>K. Social-media launch</h2>
+<p><strong>Project name:</strong> Money Follows Fly.</p>
+<p><strong>README headline:</strong> Pehchaan first. Paisa later. A fly-connectome reward experiment.</p>
+<p><strong>X post:</strong></p>
+<blockquote>
+<p>Ravi Kishan: “Money follows my brother.”</p>
+<p>Me: gave a virtual fly ₹10 now vs ₹100 later. 🪰</p>
+<p>Real FlyWire wiring. Just 32 external weights learn. 3D fly, visible receipts.</p>
+<p>99.4% on the easy test. Reversal? Brother struggled.</p>
+<p>The fly understands neither Hindi nor money. [demo link]</p>
+</blockquote>
+<p><strong>15-second demo script:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Screen and caption</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0–3 s</td>
+<td>Close-up fly, two choices. “Pehchaan ya paisa?”</td>
+</tr>
+<tr>
+<td>3–6 s</td>
+<td>Fast train; show measured before/after, then “32 external weights learn.”</td>
+</tr>
+<tr>
+<td>6–11 s</td>
+<td>Watch one frozen choice: fly walks, waits, receives the scheduled reward. “Money follows… after five ticks.”</td>
+</tr>
+<tr>
+<td>11–15 s</td>
+<td>Show 99.4% default / 57.0% transfer / 30.9% reversal. “Brother has limits. Full controls + code.”</td>
+</tr>
+</tbody>
+</table>
+<p>Use text or original narration. The demo includes no licensed song audio.</p>
+<p><strong>Thumbnail concept:</strong> a large fly in three-quarter view between a lime ₹10 coin
+and a cyan Pehchaan marker; headline “MONEY FOLLOWS FLY”; small legible subtitle
+“Real wiring. 32 learned weights.” Keep percentages out unless the test condition
+is also shown. This is a concept, not a generated thumbnail asset.</p>
+<p><strong>Follow-up 1:</strong> “The random network also got 100%. So no, this doesn't prove fly
+wiring is a better learner. Baselines are where the science starts.”</p>
+<p><strong>Follow-up 2:</strong> “Changed the input from 150 to 120 Hz. Success fell from 99.4% to
+57.0%. Same wiring, same readout. Robustness is the real test.”</p>
+<p><strong>Follow-up 3:</strong> “We reversed which choice pays. After 300 more episodes, mean
+success was 30.9%. Pehchaan ki aadat strong thi. Reversal result included.”</p>
+<p><strong>Follow-up 4:</strong> “The realistic fly is Flybody geometry with an authored gait.
+The connectome controller picks the destination. Rendering, motor control and
+learning are different jobs.”</p>
+<p>Do not use “the first fly that understands money,” “the whole brain learned,”
+“conscious digital fly,” “biologically faithful dopamine learning,” or “MaleCNS
+demo” for this implementation. The actual implementation is more modest and
+more reproducible than those slogans.</p>
+<h2>Credits and reproducibility notes</h2>
+<ul>
+<li>FlyWire FAFB connectivity/annotations: cite FlyWire and the original authors;
+retain the source data's CC BY 4.0 attribution when redistributing it.</li>
+<li>Shiu table source: commit <code>91bdd1e7dcf193f3e7ca5a8933497fcef63b7960</code>.</li>
+<li>flypoke simulator: MIT, commit <code>24814fe83224ca2d25c116c1107440b877b07762</code>.</li>
+<li>Flybody anatomy: Apache-2.0, commit <code>d015e9bfe441bd90ae431bac24c55cb74bdbce26</code>.
+Meshes were simplified, transformed and converted. The browser gait is new.
+A copy of its license accompanies the asset.</li>
+<li>Three.js 0.180.0: MIT, locally bundled with its license.</li>
+<li>Source file SHA-256 hashes are in <code>data/manifest.json</code> and the response bank.</li>
+<li>The annotation URL currently names upstream <code>main</code>; its required content hash
+is fixed. If it changes, the downloader fails rather than silently switching
+data. Resolve the archived version before regenerating results.</li>
+<li>Primary-repo source inspection is not the same as running all upstream test
+suites. The local tests target this implementation and the reused neural
+behaviour; Flybody locomotion and FlyVis training were not reproduced.</li>
+</ul>
+<a class="back" href="index.html">← TRY THE CONTROLS</a></article></body></html>

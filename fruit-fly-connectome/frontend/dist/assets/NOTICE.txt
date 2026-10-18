@@ -1,0 +1,17 @@
+Fly anatomy derived from https://github.com/TuragaLab/flybody
+Commit d015e9bfe441bd90ae431bac24c55cb74bdbce26
+License: Apache-2.0, included in FLYBODY-LICENSE.txt.
+Changes by Money Follows Fly: mesh simplification, coordinate conversion,
+binary packaging and an authored browser gait. No physical simulation or
+upstream pretrained locomotion policy is used at runtime.
+
+Measured neural response assets derive from FlyWire FAFB v783 data and the
+Shiu et al. computational model using flypoke. Cite Dorkenwald et al., Nature
+2024, doi:10.1038/s41586-024-07558-y; Schlegel et al., Nature 2024,
+doi:10.1038/s41586-024-07686-5; Shiu et al., Nature 2024,
+doi:10.1038/s41586-024-07763-9. See research.html and responses.json for
+source versions, transformations and hashes. FlyWire data attribution: CC BY 4.0.
+flypoke and Shiu code licenses are included alongside this notice.
+
+Three.js 0.180.0 is locally bundled under MIT, with its license in vendor/.
+The author of the meme/interview did not endorse or participate in this project.
