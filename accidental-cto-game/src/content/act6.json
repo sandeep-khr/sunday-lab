@@ -1,0 +1,493 @@
+[
+  {
+    "id": "b21",
+    "act": 6,
+    "num": "22",
+    "title": "A Billion Friends",
+    "tagline": "Sharding & consistent hashing",
+    "story": [
+      "The catalog outgrew its biggest box twice this year. Vertical scaling is officially dead; replicas only multiply READ capacity, and writes still funnel into one primary.",
+      "The industry answer: split the data itself across machines. The dangerous part is WHERE each row lives — and what happens when that mapping changes."
+    ],
+    "scenes": [
+      {
+        "kind": "investigation",
+        "investigation": {
+          "briefing": [
+            "[GRAFANA] shard-eu CPU 97% - shards us/ap idle at 20%",
+            "#data - writes queuing on shard-eu ONLY",
+            "DM from Priya - my EU shop is slow AGAIN"
+          ],
+          "checks": [
+            {
+              "id": "per-shard",
+              "label": "per-shard QPS dashboard",
+              "out": "shard-us   1,240 qps\nshard-ap   1,180 qps\nshard-eu   8,900 qps\n\nOne shard carries half the fleet's load.",
+              "cmd": "shardctl qps --all"
+            },
+            {
+              "id": "key-hist",
+              "label": "SELECT country, count(*) FROM users GROUP BY 1",
+              "out": "country | count\nDE       | 31%\nIN       | 28%\nGB       | 12%\nUS       | 9%\n...\n\nYou sharded by COUNTRY. Two countries own the majority of rows and traffic.",
+              "clue": "skewed_key",
+              "cmd": "psql -c country histogram"
+            },
+            {
+              "id": "rehash-sim",
+              "label": "simulate adding a node with hash(key) mod N",
+              "out": "Adding node #4 under naive modulo remaps 71% of keys.\nEvery almost-key moves = mass migration + cache apocalypse.",
+              "clue": "naive_mod",
+              "cmd": "simulate rehash --nodes 4"
+            }
+          ],
+          "fixes": [
+            {
+              "id": "hot-replica",
+              "label": "Add a read replica to the hot shard, hope writes stay flat",
+              "requires": [],
+              "effects": {
+                "cash": -10,
+                "speed": 3
+              },
+              "successText": "EU reads breathe for a quarter. Then EU sellers grow another 40% and you are back in this exact room.",
+              "lesson": "Replicating a hot shard copies the problem; rebalancing the key space solves it."
+            },
+            {
+              "id": "consistent-hash",
+              "label": "Rehash onto consistent-hashed ring with virtual nodes",
+              "requires": [
+                "skewed_key",
+                "naive_mod"
+              ],
+              "effects": {
+                "cash": -24,
+                "speed": 8,
+                "reliability": 6
+              },
+              "unlock": "sharding",
+              "deepDive": {
+                "title": "Consistent Hashing & Virtual Nodes",
+                "body": "Place nodes on a hash ring; each key belongs to the next node clockwise. When a node joins or dies, only its ring-neighborhood moves (~1/N of keys), not everything. Virtual nodes (each physical machine appearing 100-200 times on the ring) smooth out skew so no single country can dominate a shard again. This trick powers Cassandra, DynamoDB, Discord — and your catalog now too."
+              },
+              "successText": "Keys redistribute smoothly; shard-eu drops to 2,100 qps while total cluster capacity triples. Priya's shop renders before her thumb leaves the screen.",
+              "lesson": "Shard by high-cardinality keys on a consistent hash ring — and never let one customer own your hottest node."
+            }
+          ]
+        }
+      }
+    ],
+    "quiz": {
+      "q": "Why does consistent hashing beat hash(key) mod N?",
+      "options": [
+        "It hashes faster on modern CPUs",
+        "Adding/removing a node moves only ~1/N of keys instead of nearly all",
+        "It automatically replicates data three times"
+      ],
+      "answer": 1,
+      "explain": "Modulo arithmetic ties every key to the total node count, so changing N remaps virtually everything. The ring approach localizes disruption to adjacent arcs."
+    },
+    "codex": [
+      "sharding"
+    ],
+    "surge": 1.35
+  },
+  {
+    "id": "b22",
+    "act": 6,
+    "num": "23",
+    "title": "The Partition Test",
+    "tagline": "NoSQL & the CAP theorem",
+    "story": [
+      "Your first overseas region goes live. During a trans-ocean cable cut, two regions both accept orders — and reconcile DIFFERENT truths when the link returns.",
+      "The textbook triangle rears its head: under a partition you cannot have both consistency and availability. Every datastore makes this choice for you; great architects choose deliberately per workload."
+    ],
+    "scenes": [
+      {
+        "prompt": "Which promise does each workload get?",
+        "choices": [
+          {
+            "id": "polyglot",
+            "label": "Split it: strong consistency for money, eventual for carts & feeds",
+            "detail": "Orders stay on consensus-backed SQL. Carts move to an always-writable document store that reconciles later.",
+            "effects": {
+              "cash": -18,
+              "speed": 7,
+              "reliability": 5
+            },
+            "unlock": "nosql",
+            "deepDive": {
+              "title": "PACELC in Practice",
+              "body": "CAP speaks only of partitions; PACELC adds the everyday tradeoff: Else, latency vs consistency even WITHOUT failures. Document stores choose availability everywhere — every region writable, conflicts resolved last-write-wins. Perfect for carts and activity feeds where a stale thumbnail beats an error page. Money stays put because 'eventually correct' is not a phrase finance enjoys hearing about payroll."
+            },
+            "result": "During the next cable cut, carts keep filling across three regions while order processing pauses gracefully for 90 seconds instead of corrupting ledgers. Both sides survive.",
+            "lesson": "Polyglot persistence: give each workload the consistency contract its business actually needs — not the one your favorite database markets."
+          },
+          {
+            "id": "all-sql-cp",
+            "label": "Everything stays on strongly-consistent SQL, regions pause during cuts",
+            "detail": "One truth, zero surprises, occasional unavailability.",
+            "effects": {
+              "reliability": 3,
+              "speed": -4
+            },
+            "result": "Data is pristine. But every cable hiccup now means checkout buttons spin worldwide while the quorum elects a leader.",
+            "lesson": "Choosing CP everywhere trades small correctness risks for guaranteed availability incidents."
+          },
+          {
+            "id": "all-nosql-ap",
+            "label": "Everything becomes eventually consistent, maximum uptime",
+            "detail": "Always writable! What could possibly diverge?",
+            "effects": {
+              "speed": 5,
+              "cash": -10,
+              "reliability": -8
+            },
+            "setFlags": [
+              "ap_everything"
+            ],
+            "result": "Uptime soars until two regional ledgers disagree about who paid for what, and reconciliation becomes a human spreadsheet festival.",
+            "lesson": "Eventual consistency is a loan against tomorrow — spend it only where interest rates are kind."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "During a network partition, CAP says a distributed system must sacrifice:",
+      "options": [
+        "Latency",
+        "Either consistency or availability",
+        "Durability"
+      ],
+      "answer": 1,
+      "explain": "Partitioned nodes can either refuse requests to stay consistent (CP) or keep serving possibly-stale data (AP). Latency tradeoffs are PACELC's 'E' — a separate axis."
+    },
+    "codex": [
+      "nosql"
+    ],
+    "surge": 1.25
+  },
+  {
+    "id": "b23",
+    "act": 6,
+    "num": "24",
+    "title": "The Bouncer's Clipboard",
+    "tagline": "Rate limiting & backpressure",
+    "art": "/art/ch14-war-shopify.png",
+    "story": [
+      "A flash sale goes live and a bot farm discovers your API forty seconds later. Legitimate merchants queue behind thousands of scripted price-scrapers.",
+      "Real clubs solve this with a clipboard at the door. Your platform has an unlocked front entrance."
+    ],
+    "scenes": [
+      {
+        "kind": "investigation",
+        "investigation": {
+          "briefing": [
+            "[ALERT] API p99 exploded 120ms -> 4.1s during sale launch",
+            "#support - merchants: app unusable exactly at drop time",
+            "[GRAFANA] 38k req/min from ~200 suspicious IPs"
+          ],
+          "checks": [
+            {
+              "id": "top-ips",
+              "label": "top client IPs in nginx access log",
+              "out": "awk '{print $1}' access.log | sort | uniq -c | sort -rn | head\n 18402 34.x.x.x\n 17233 51.x.x.x\n 16001 20.x.x.x\n...\nThree IPs account for more traffic than your top 50,000 real users combined.",
+              "clue": "bot_farm",
+              "cmd": "awk top IPs access.log"
+            },
+            {
+              "id": "status-codes",
+              "label": "distribution of response codes",
+              "out": "200: 61%   429: 0%   500: 19%   502: 20%\n\nNothing is being rejected early — junk flows all the way into Postgres before dying.",
+              "clue": "no_early_reject",
+              "cmd": "nginx status codes"
+            },
+            {
+              "id": "db-load",
+              "label": "pg_stat_activity during spike",
+              "out": "214 connections: 190 are scraper-driven catalog reads.\nGenuine checkout queries wait behind scrapers in the same pool.",
+              "clue": "bot_farm",
+              "cmd": "pg_stat_activity"
+            }
+          ],
+          "fixes": [
+            {
+              "id": "iptables",
+              "label": "Manually firewall the top 200 IPs right now",
+              "requires": [],
+              "effects": {
+                "cash": -2,
+                "speed": 4,
+                "debt": 6
+              },
+              "successText": "The farm rotates subnets within the hour and you play whack-a-mole all evening.",
+              "lesson": "Manual blocks decay in hours; policy enforced in code scales forever."
+            },
+            {
+              "id": "token-bucket",
+              "label": "Deploy token-bucket rate limiter keyed by API token at the edge",
+              "requires": [
+                "bot_farm",
+                "no_early_reject"
+              ],
+              "effects": {
+                "cash": -14,
+                "speed": 8,
+                "reliability": 5
+              },
+              "unlock": "ratelimit",
+              "deepDive": {
+                "title": "Token Buckets & Backpressure",
+                "body": "Each client holds a bucket of tokens refilled at a steady rate; a request spends one token, empty bucket means HTTP 429 with Retry-After. Bursts still work (that's the bucket), averages stay capped (that's the tap). Crucially, rejection happens BEFORE expensive work — databases stop paying for traffic you never wanted."
+              },
+              "successText": "Scrapers receive tidy 429s at the edge while merchant checkout sails through untouched. CPU falls 60%; the next drop feels like a normal Tuesday.",
+              "lesson": "Rate limiting is not distrust of users — it is physics protection for everything standing behind the door."
+            }
+          ]
+        }
+      }
+    ],
+    "quiz": {
+      "q": "Why reject (429) at the edge instead of letting requests through?",
+      "options": [
+        "Edge servers are cheaper than app servers",
+        "Early rejection prevents junk from consuming database connections and cascading",
+        "429 responses improve SEO"
+      ],
+      "answer": 1,
+      "explain": "Backpressure works by shedding load BEFORE it hits expensive resources — one cheap TCP response versus a hundred-dollar database connection held hostage."
+    },
+    "codex": [
+      "ratelimit"
+    ],
+    "surge": 1.2
+  },
+  {
+    "id": "b24",
+    "act": 6,
+    "num": "25",
+    "title": "Live Wires",
+    "tagline": "WebSockets & real-time delivery",
+    "story": [
+      "Merchants want live order tracking: buyer pays, kitchen sees the ticket, rider gets pinged. Today that 'real-time' is 5-second polling — and polling at scale is just self-inflicted DDoS.",
+      "Sixty thousand concurrent pollers later, you owe your app servers an apology."
+    ],
+    "scenes": [
+      {
+        "prompt": "How does the platform go real-time?",
+        "choices": [
+          {
+            "id": "ws-pubsub",
+            "label": "WebSockets + Redis pub/sub fan-out",
+            "detail": "Persistent connections push events instantly; pub/sub broadcasts across your server pool.",
+            "effects": {
+              "cash": -16,
+              "speed": 9,
+              "morale": 4
+            },
+            "unlock": "realtime",
+            "deepDive": {
+              "title": "Fan-out Without Tears",
+              "body": "A socket lives on ONE server, but an order event interests subscribers connected to MANY servers. Publishing to a Redis channel lets every app server pick up the event and forward it to its own sockets. Add heartbeat pings to detect dead connections hiding behind proxies — and remember load balancers need sticky sessions or shared state, because WebSockets break the stateless-app rule politely but firmly."
+            },
+            "result": "Buyer taps pay; the kitchen printer chirps in under a second. Polling load vanishes and app servers throw a small party.",
+            "lesson": "Push beats poll: persistent sockets plus pub/sub turn fire-hose refresh into elegant event delivery."
+          },
+          {
+            "id": "faster-polling",
+            "label": "Cut polling interval to one second",
+            "detail": "Same architecture, six times the requests. Bravely done.",
+            "effects": {
+              "cash": -6,
+              "debt": 10,
+              "speed": 2
+            },
+            "result": "Updates arrive faster... until traffic doubles and the polling army devours every spare cycle.",
+            "lesson": "Scaling a wasteful pattern just buys you a bigger wasteful pattern."
+          },
+          {
+            "id": "third-party-push",
+            "label": "Bolt on a third-party realtime SaaS",
+            "detail": "Someone else's websockets, your credit card.",
+            "effects": {
+              "cash": -22,
+              "speed": 5
+            },
+            "result": "It works beautifully and invoices accordingly. Vendor lock-in quietly becomes core infrastructure.",
+            "lesson": "Buying leverage is legitimate engineering — just read the exit clauses before the wedding."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "Why do WebSocket deployments need pub/sub (like Redis)?",
+      "options": [
+        "WebSockets compress better with pub/sub",
+        "Any server must reach sockets held by OTHER servers",
+        "Pub/sub replaces the need for heartbeats"
+      ],
+      "answer": 1,
+      "explain": "Connections are pinned to individual servers. A channel everyone subscribes to turns 'which server holds which socket' into somebody else's bookkeeping."
+    },
+    "codex": [
+      "realtime"
+    ],
+    "surge": 1.3
+  },
+  {
+    "id": "b25",
+    "act": 6,
+    "num": "26",
+    "title": "Cache Wars II",
+    "tagline": "Write patterns, eviction & stampedes",
+    "story": [
+      "Redis reads are glorious. Now the team debates WRITES: should cached data be written through to Postgres immediately, or trusted in cache and flushed lazily?",
+      "Meanwhile a hot product page expires mid-flash-sale and the database learns what a thundering herd feels like."
+    ],
+    "scenes": [
+      {
+        "prompt": "Pick the write strategy for cart and inventory data.",
+        "choices": [
+          {
+            "id": "write-through",
+            "label": "Write-through: cache and DB update together",
+            "detail": "Slightly slower writes; nothing cacheable is ever lost.",
+            "effects": {
+              "cash": -8,
+              "reliability": 6,
+              "speed": 3
+            },
+            "deepDive": {
+              "title": "Through, Behind & Around",
+              "body": "WRITE-THROUGH updates cache and database synchronously — carbon-copy receipts, zero loss, higher write latency. WRITE-BACK accepts writes in cache and flushes periodically — napkin math that loses whatever the coffee spills (a Redis restart) unless you add persistence discipline. WRITE-AROUND skips the cache for cold writes entirely, keeping it full of genuinely hot reads. Choose per data type, not per fashion."
+            },
+            "result": "Carts survive Redis restarts untouched; inventory counts match the ledger every audit. Writes cost 4ms more and nobody notices.",
+            "lesson": "For data you cannot afford to lose, write-through is boring — and boring is bulletproof."
+          },
+          {
+            "id": "write-back",
+            "label": "Write-back: blazing writes, periodic flush to DB",
+            "detail": "Accept the risk, harvest the speed.",
+            "effects": {
+              "speed": 9,
+              "cash": -5,
+              "reliability": -7
+            },
+            "setFlags": [
+              "lossy_cache"
+            ],
+            "result": "Benchmark graphs look incredible until a Redis failover eats ninety seconds of carts and support invents new swear words.",
+            "lesson": "Write-back trades durability for speed — a fine deal only where losing data costs less than waiting for it."
+          },
+          {
+            "id": "tune-only",
+            "label": "Keep cache-aside everywhere, tune TTLs and eviction",
+            "detail": "No new patterns; sharpen what exists.",
+            "effects": {
+              "speed": 4
+            },
+            "result": "Hit rate climbs to 94%. Solid, honest work — the stampede question remains unanswered, glaring, patient.",
+            "lesson": "Tuning beats rewriting when the fundamentals are sound; just know which dragon you left in the basement."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "A hot key expires during peak traffic. Which mitigation helps MOST?",
+      "options": [
+        "Raising maxmemory on Redis",
+        "Request coalescing / locks so only ONE request rebuilds the key",
+        "Shorter TTLs everywhere"
+      ],
+      "answer": 1,
+      "explain": "Stampedes happen when thousands miss simultaneously. Coalescing funnels them through a single rebuild (or serves slightly-stale values) — the herd never reaches the database."
+    },
+    "codex": [
+      "cache_patterns"
+    ],
+    "surge": 1.15
+  },
+  {
+    "id": "b26",
+    "act": 6,
+    "num": "27",
+    "title": "The Whiteboard Gauntlet",
+    "tagline": "Back-of-envelope estimation",
+    "story": [
+      "An investor's technical due-diligence panel wants live numbers: 'Walk us through what 10 million daily merchants actually require.' No dashboards. Just you, a whiteboard marker, and arithmetic.",
+      "This is the opening move of every system design interview ever conducted. Master it here."
+    ],
+    "scenes": [
+      {
+        "prompt": "Panel question one: 10M daily active merchants, each averaging 20 page views. Roughly what average request rate must the platform serve?",
+        "choices": [
+          {
+            "id": "est-right",
+            "label": "~116K rps? No wait — do it properly: 200M reads/day ÷ 86,400s ≈ 2,300 rps average",
+            "detail": "Daily totals ÷ seconds in a day, then apply a peak multiplier.",
+            "effects": {
+              "reputation": 6,
+              "morale": 4
+            },
+            "deepDive": {
+              "title": "Fermi Estimation, Weaponized",
+              "body": "The ritual: state assumptions aloud → convert DAU to events/day → divide by 86,400 for the average → multiply 3-5x for peak (traffic is lumpy, lunchtime is real) → round aggressively to powers of ten. 1M DAU × 10 reads ≈ 10M/day ≈ ~116 rps average, ~500 rps peak. Nobody grades decimals; everybody grades whether your process is sane."
+            },
+            "result": "You narrate the arithmetic step by step; a partner circles '~2,300 avg, ~10K peak' and writes 'thinks like an operator' in the margin.",
+            "lesson": "Back-of-envelope estimation: assumptions stated out loud, powers of ten respected, precision sacrificed proudly."
+          },
+          {
+            "id": "est-guess",
+            "label": "Confidently declare 'about a million requests per second'",
+            "detail": "Big number, big energy, no method.",
+            "effects": {
+              "reputation": -5
+            },
+            "result": "A partner asks what the DAU assumption was. The silence has texture. You rebuild the estimate properly and salvage some credibility.",
+            "lesson": "An unjustified number is worse than none — it signals the absence of process."
+          }
+        ]
+      },
+      {
+        "prompt": "Question two: product images average 300KB. Daily storage growth and monthly bandwidth?",
+        "choices": [
+          {
+            "id": "est-storage",
+            "label": "5M uploads/day × 300KB ≈ 1.5TB/day → ~45PB/year; CDN absorbs most bandwidth",
+            "detail": "Storage compounds daily; bandwidth is tamed by caching layers.",
+            "effects": {
+              "reputation": 5,
+              "cash": -3
+            },
+            "result": "'And that's why the CDN line item exists,' you say, tapping the earlier chapters of your own story. Panel nods.",
+            "lesson": "Estimation connects directly to architecture decisions — storage math funds CDN contracts."
+          },
+          {
+            "id": "est-panic",
+            "label": "Start calculating on fingers, abandon halfway, pivot to vibes",
+            "detail": "Happens to everyone once.",
+            "effects": {
+              "morale": -3,
+              "reputation": -2
+            },
+            "result": "The panel smiles kindly and moves on, which somehow stings more than interruption.",
+            "lesson": "Practice the ritual until it survives adrenaline; estimation is a rehearsal skill."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "1M DAU × 10 reads each ≈ what AVERAGE read rate?",
+      "options": [
+        "~11,600 rps",
+        "~116 rps",
+        "~1,160 rps"
+      ],
+      "answer": 1,
+      "explain": "10M reads ÷ 86,400 seconds ≈ 115.7 rps. Peak multipliers take it to 400-600 rps. Memorize this dance — interviews open with it."
+    },
+    "codex": [
+      "estimation"
+    ],
+    "surge": 1.15
+  }
+]

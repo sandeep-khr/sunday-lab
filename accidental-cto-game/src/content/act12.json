@@ -1,0 +1,753 @@
+[
+  {
+    "id": "ch1",
+    "act": 1,
+    "num": "01",
+    "title": "The 3 AM Phone Call",
+    "tagline": "Your first server will always fail",
+    "art": "/art/ch1-3am-call.png",
+    "story": [
+      "Launch day. One VPS, one MySQL install, one dream. The site is live and the first merchant signs up.",
+      "At 3:07 AM your phone rings. The server is dead and a customer is already tweeting about it.",
+      "You have no monitoring, no alerts, no idea how long it has been down."
+    ],
+    "scenes": [
+      {
+        "kind": "investigation",
+        "investigation": {
+          "briefing": [
+            "[PAGERDUTY] CRITICAL - https://shop.app is DOWN (connection refused)",
+            "#general - CEO: site is down?? customers are calling me!!",
+            "#support - 14 tickets in the last 5 minutes"
+          ],
+          "checks": [
+            {
+              "id": "ping",
+              "label": "ping prod-01",
+              "out": "Request timeout for icmp_seq 0\nRequest timeout for icmp_seq 1\n--- prod-01 ping statistics ---\n100% packet loss",
+              "cmd": "ping -c 3 prod-01"
+            },
+            {
+              "id": "curl",
+              "label": "curl -I https://shop.app",
+              "out": "curl: (7) Failed to connect to shop.app port 443\nConnection refused",
+              "cmd": "curl -I https://shop.app"
+            },
+            {
+              "id": "console",
+              "label": "attach rescue console",
+              "out": "[1883.221] EXT4-fs warning: device sda1 nearly full\n[1883.402] kernel: nginx[812]: kill failed? no — OOM killer terminated nginx\n[1884.005] systemd: nginx.service entered failed state",
+              "clue": "disk_full",
+              "cmd": "ssh rescue@prod-01"
+            },
+            {
+              "id": "df",
+              "label": "df -h /",
+              "out": "Filesystem  Size  Used Use% Mounted on\n/dev/sda1    50G   50G  100% /\n\n48GB of nginx access logs written this week. Nothing ever rotated them.",
+              "clue": "disk_full",
+              "cmd": "df -h /"
+            }
+          ],
+          "fixes": [
+            {
+              "id": "restart-blind",
+              "label": "systemctl restart nginx (just restart it)",
+              "requires": [],
+              "effects": {
+                "reliability": 2
+              },
+              "failEffects": {
+                "reliability": -2,
+                "morale": -2
+              },
+              "successText": "nginx comes back... and stays up, barely, until the disk fills again next week.",
+              "failText": "nginx starts, serves traffic for four minutes, then dies again. The disk is still 100% full.",
+              "lesson": "Restarting a system without understanding why it failed is a coin toss with extra steps."
+            },
+            {
+              "id": "rotate-monitor",
+              "label": "Clear logs, add logrotate, install node exporter + alerts",
+              "requires": [
+                "disk_full"
+              ],
+              "effects": {
+                "reliability": 12,
+                "cash": -4
+              },
+              "unlock": "monitoring",
+              "deepDive": {
+                "title": "The Four Golden Signals",
+                "body": "Google's SRE playbook says watch four things: latency (how fast), traffic (how much), errors (how often) and saturation (how full). A disk at 100% is saturation with a countdown timer attached — an alert at 80% turns tonight's outage into a Tuesday-morning chore."
+              },
+              "successText": "Disk cleared, logrotate configured, node exporter scraping, alert wired to your phone at 80%. By sunrise you know exactly what died and why — and you'll know before it happens again.",
+              "lesson": "Your first server will always fail. It's not a matter of if, but when. The goal is to know before your customers do."
+            }
+          ]
+        }
+      }
+    ],
+    "quiz": {
+      "q": "What should page you FIRST when things break?",
+      "options": [
+        "User-facing symptoms like error rate and latency",
+        "CPU temperature of the database server",
+        "A daily summary email of all metrics"
+      ],
+      "answer": 0,
+      "explain": "Alerts should mirror customer pain. A user seeing a 500 error matters more than any internal machine statistic — machines can be unhealthy while users are fine, and vice versa."
+    },
+    "codex": [
+      "monitoring"
+    ],
+    "surge": 1.25
+  },
+  {
+    "id": "ch2",
+    "act": 1,
+    "num": "02",
+    "title": "The WhatsApp PDF Problem",
+    "tagline": "The origin story of the MVP",
+    "art": "/art/ch2-origin-priya.png",
+    "story": [
+      "Sellers like Priya run shops with no website. They photograph products, make PDF catalogs, and WhatsApp them to customers. Orders happen in chat; chaos happens in accounting.",
+      "You see the problem clearly. Now everyone wants to know when the 'real product' ships.",
+      "Your co-founder wants a perfect platform. Your bank account disagrees."
+    ],
+    "scenes": [
+      {
+        "prompt": "What do you ship?",
+        "choices": [
+          {
+            "id": "ship-mvp",
+            "label": "Ship the ugly MVP now",
+            "detail": "One screen: catalog as a shareable link, orders land in a simple admin. Ugly but alive.",
+            "effects": {
+              "debt": 6,
+              "cash": -5,
+              "morale": 5
+            },
+            "unlock": "mvp",
+            "deepDive": {
+              "title": "The Skateboard Principle",
+              "body": "An MVP isn't a small car — it's a skateboard, then a scooter, then a bicycle, then a car. Each version transports the user and generates learning that shapes the next build. Ship the smallest thing that solves the core job, then let real usage tell you what to build next."
+            },
+            "result": "Priya shares her catalog link in three WhatsApp groups. By Friday, forty sellers signed up out of nowhere. The experiment worked — people want this.",
+            "lesson": "The MVP is an experiment to test your core hypothesis, not a small version of the final product."
+          },
+          {
+            "id": "perfect-platform",
+            "label": "Build the real platform properly first",
+            "detail": "Multi-tenant, beautiful dashboards, mobile apps. Six months, minimum.",
+            "effects": {
+              "cash": -20,
+              "morale": -8,
+              "reputation": 4
+            },
+            "unlock": "mvp",
+            "result": "Six months later you launch something polished... for a market that has already moved on. Competitors shipped ugly and learned faster.",
+            "lesson": "Perfect is the enemy of tested. An unshipped product teaches you nothing about the market."
+          },
+          {
+            "id": "cheap-agency",
+            "label": "Outsource to the cheapest agency you can find",
+            "detail": "They promise 'full e-commerce solution' in one month.",
+            "effects": {
+              "cash": -12,
+              "debt": 14,
+              "reliability": -8
+            },
+            "unlock": "mvp",
+            "result": "It launches. Sort of. Every page load rolls dice, and the codebase arrives as a zip file with zero documentation. You inherit the mess.",
+            "lesson": "Technical debt taken on day one charges interest during every future crisis."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "An MVP exists primarily to...",
+      "options": [
+        "Generate revenue from day one",
+        "Test your riskiest business hypothesis with real users",
+        "Impress investors with polish"
+      ],
+      "answer": 1,
+      "explain": "MVP = Minimum VIABLE Product: viable means 'can validate the hypothesis'. Revenue and polish come after you've confirmed people actually want the thing."
+    },
+    "codex": [
+      "mvp"
+    ],
+    "surge": 2
+  },
+  {
+    "id": "ch3",
+    "act": 1,
+    "num": "03",
+    "title": "The Great Divorce",
+    "tagline": "Separating the app and the database",
+    "story": [
+      "Growth is real now. But every traffic spike makes the whole site slow — because your app and your database live on the same machine, fighting for the same CPU.",
+      "Postgres is eating 95% of the box while the app server starves right next to it."
+    ],
+    "scenes": [
+      {
+        "kind": "investigation",
+        "investigation": {
+          "briefing": [
+            "#eng - intern: checkout feels slow again??",
+            "[GRAFANA] app-01 CPU 92% - postgres 91% - SAME BOX",
+            "DM from Priya - my shop page takes forever!! customers are leaving"
+          ],
+          "checks": [
+            {
+              "id": "top",
+              "label": "ssh prod-01 -> top",
+              "out": "Tasks: 187 total\n%Cpu(s): 96.2 us\nKiB Swap: 41% used\n\n  PID USER   %CPU COMMAND\n  812 postgres 91.4 postgres: SELECT * products\n 344 node     78.1 node /srv/app/server.js",
+              "cmd": "top"
+            },
+            {
+              "id": "pgstat",
+              "label": "psql -c 'SELECT count(*) FROM pg_stat_activity'",
+              "out": " count\n-----\n  214\n(214 rows)\n\nTwo hundred concurrent read queries hammering the same instance that must also serve every write.",
+              "cmd": "psql pg_stat_activity"
+            },
+            {
+              "id": "iostat",
+              "label": "iostat -x 1 3",
+              "out": "Device  r/s   w/s  %util\nsda   4200   140  99.2\n\nRandom reads saturating the disk. App and DB are queuing for the same spindle.",
+              "clue": "shared_box",
+              "cmd": "iostat -x 1 3"
+            },
+            {
+              "id": "htop-filter",
+              "label": "htop --filter=postgres",
+              "out": "postgres threads pinning cores 0-7 while node processes starve on the same 8 cores.\nNeither can be tuned without hurting the other.",
+              "clue": "shared_box",
+              "cmd": "htop"
+            }
+          ],
+          "fixes": [
+            {
+              "id": "bigger-box",
+              "label": "Buy a bigger single box. Again.",
+              "requires": [],
+              "effects": {
+                "cash": -18,
+                "debt": 10,
+                "speed": 4
+              },
+              "successText": "Two quieter weeks. Then the festival spike returns bigger, and you are shopping for servers again.",
+              "lesson": "Vertical scaling buys time, not architecture. There is always a ceiling — and you are racing toward it."
+            },
+            {
+              "id": "divorce",
+              "label": "Migrate Postgres to its own dedicated server",
+              "requires": [
+                "shared_box"
+              ],
+              "effects": {
+                "cash": -12,
+                "reliability": 8,
+                "speed": 10
+              },
+              "unlock": "db_split",
+              "deepDive": {
+                "title": "Why the First Divorce Works",
+                "body": "Apps want fast CPU bursts; databases want RAM, sequential I/O and stable cache. On one machine they fight for every core and gigabyte. Splitting them lets you tune Postgres memory (shared_buffers), size the app tier elastically, and later add read replicas or caches WITHOUT touching the other layer."
+              },
+              "successText": "Latency drops by half overnight. The app breathes, the database breathes, and for the first time they scale independently.",
+              "lesson": "Separating your application and database servers is the first crucial step in scaling."
+            }
+          ]
+        }
+      }
+    ],
+    "quiz": {
+      "q": "Why separate app and database servers?",
+      "options": [
+        "To save money on hosting",
+        "So each can be tuned, sized and scaled independently",
+        "Because databases cannot run on virtual machines"
+      ],
+      "answer": 1,
+      "explain": "Apps and databases have completely different resource profiles. Separation lets you tune each layer independently — and later scale reads, add caches, or migrate storage without touching app code."
+    },
+    "codex": [
+      "db_split"
+    ],
+    "surge": 1.35
+  },
+  {
+    "id": "ch4",
+    "act": 1,
+    "num": "04",
+    "title": "The Traffic Cop",
+    "tagline": "An introduction to load balancing",
+    "story": [
+      "A festival sale doubles your traffic overnight. Your single app server saturates; requests queue, time out, retry, and make everything worse.",
+      "You need more than one server. You need someone to stand at the door and route the crowd."
+    ],
+    "scenes": [
+      {
+        "prompt": "The queue is backing up. What's the move?",
+        "choices": [
+          {
+            "id": "lb-pool",
+            "label": "Load balancer + a pool of identical app servers",
+            "detail": "Horizontal scaling: cheap machines, added or removed behind one front door.",
+            "effects": {
+              "cash": -22,
+              "reliability": 8,
+              "morale": 3
+            },
+            "unlock": "lb",
+            "deepDive": {
+              "title": "How Load Balancers Decide",
+              "body": "Round-robin deals requests out in turn — simple and fair. Least-connections sends new work to whoever is least busy — smarter under uneven load. Weighted modes give beefier machines more traffic. Health checks are the killer feature: dead servers stop receiving traffic before users notice they died."
+            },
+            "result": "Three small servers behind an nginx load balancer. Traffic spikes now mean adding a box, not praying. One server dying barely registers.",
+            "lesson": "Horizontal scaling is the only long-term path to high availability and massive scale."
+          },
+          {
+            "id": "vertical-monster",
+            "label": "Migrate to one giant monster server",
+            "detail": "64 cores of raw denial that horizontal scaling exists.",
+            "effects": {
+              "cash": -28,
+              "debt": 12,
+              "speed": 5
+            },
+            "result": "It handles the sale. Then a kernel panic during the next one takes down 100% of your capacity, because all of your eggs were always in one basket.",
+            "lesson": "One big server is a single point of failure wearing a crown."
+          },
+          {
+            "id": "rate-limit",
+            "label": "Throttle new signups until things calm down",
+            "detail": "Protect the server. Alienate the market.",
+            "effects": {
+              "reputation": -9,
+              "speed": 4
+            },
+            "result": "The site survives, but screenshots of 'Signups Paused' spread through seller groups. Your competitors' sales teams screenshot them too.",
+            "lesson": "Turning away demand protects infrastructure but taxes growth — treat it as a last resort, not a strategy."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "Why does horizontal scaling beat vertical scaling long-term?",
+      "options": [
+        "Bigger machines are cheaper per core",
+        "No hard ceiling, fault tolerance, and elastic capacity",
+        "Vertical scaling doesn't work with databases"
+      ],
+      "answer": 1,
+      "explain": "Any single machine has a maximum size and will eventually die. Pools of smaller machines remove both limits: add capacity linearly and survive individual failures."
+    },
+    "codex": [
+      "scaling",
+      "lb"
+    ],
+    "surge": 1.7,
+    "ambient": [
+      "CEO: competitor launched 'instant checkout' today. thoughts?",
+      "#sales - biggest merchant asking if we will survive Diwali traffic"
+    ]
+  },
+  {
+    "id": "ch5",
+    "act": 2,
+    "num": "05",
+    "title": "The Bouncer at the Database Club",
+    "tagline": "Read replicas — and the lag they hide",
+    "art": "/art/ch5-stale-price.png",
+    "story": [
+      "Reads outnumber writes twenty to one, and they all hit the primary. CPU flatlines at 100% every evening.",
+      "Replicas can absorb reads... but replication takes time. Somewhere between the write and the read, Priya updates her necklace price and refreshes her store."
+    ],
+    "scenes": [
+      {
+        "prompt": "Replicas are going in. How do you handle the lag?",
+        "choices": [
+          {
+            "id": "replicas-pinned",
+            "label": "Replicas + read-your-writes session pinning",
+            "detail": "After a write, route that user's reads to the primary briefly. Slower to build, correct from day one.",
+            "effects": {
+              "cash": -18,
+              "speed": 8,
+              "reliability": 4
+            },
+            "setFlags": [
+              "pinned_reads"
+            ],
+            "unlock": "replicas",
+            "deepDive": {
+              "title": "Priya's VIP Pass",
+              "body": "Priya saves a new price — a write that goes to the primary. If her next read lands on a replica still catching up, she sees yesterday's price: the ghost of old data. Read-your-writes consistency pins her session to the primary for a short window after any write, like handing her a VIP pass past the queue. Everyone else keeps enjoying replica speed."
+            },
+            "result": "Reads drop off the primary, and nobody ever sees stale data. This is Priya's VIP pass: her writes always read back true.",
+            "lesson": "Read replicas are a huge performance win — but replication lag is real. Read-your-writes consistency must be designed, not hoped for."
+          },
+          {
+            "id": "replicas-naive",
+            "label": "Replicas everywhere, don't overthink it",
+            "detail": "Round-robin all queries. Maximum speed, minimum ceremony.",
+            "effects": {
+              "cash": -16,
+              "speed": 11
+            },
+            "setFlags": [
+              "stale_risk"
+            ],
+            "unlock": "replicas",
+            "result": "The primary finally breathes. Somewhere out there, a timer starts ticking on a support ticket titled 'my prices changed back?!'",
+            "lesson": "A replica that serves yesterday's data isn't a database, it's a rumor. Lag is not an edge case — it's Tuesday."
+          },
+          {
+            "id": "memory-cache",
+            "label": "Cache hot rows in app memory instead",
+            "detail": "No new servers. Just a dictionary that quietly becomes load-bearing.",
+            "effects": {
+              "cash": -6,
+              "speed": 7,
+              "debt": 9
+            },
+            "result": "Fast — on the one server holding the cache. The other two serve different data. In-memory state on a pool of servers is a bug factory.",
+            "lesson": "State scattered across horizontally scaled machines must be centralized or made consistent — not improvised."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "Priya updates her price but still sees the old one. Why?",
+      "options": [
+        "Her browser cached the page forever",
+        "Replication lag — her read hit a replica that hadn't caught up yet",
+        "The write failed silently"
+      ],
+      "answer": 1,
+      "explain": "Asynchronous replication copies writes to replicas after the fact. A read landing on a lagging replica returns stale data — solved by pinning recent writers to the primary."
+    },
+    "codex": [
+      "replicas"
+    ],
+    "surge": 1.4
+  },
+  {
+    "id": "ch6",
+    "act": 2,
+    "num": "06",
+    "title": "\"Don't Test on Prod, Bro!\"",
+    "tagline": "The staging environment",
+    "story": [
+      "A Friday deploy — tested only by shipping it — takes checkout down for two hours. The fix was one line. So was the mistake.",
+      "The team is scared of deploys now. Scared teams deploy less, and deployments that happen rarely hurt more."
+    ],
+    "scenes": [
+      {
+        "prompt": "How does deployment work from now on?",
+        "choices": [
+          {
+            "id": "build-staging",
+            "label": "Build staging and make it mandatory",
+            "detail": "A production twin where releases rehearse before they perform. Nothing reaches prod unseen.",
+            "effects": {
+              "cash": -10,
+              "morale": 7,
+              "reliability": 6
+            },
+            "unlock": "staging",
+            "result": "Deploys become boring, which is the highest compliment a deploy can receive. The team ships twice as often, at half the heart rate.",
+            "lesson": "A staging environment is a non-negotiable insurance policy against self-inflicted outages."
+          },
+          {
+            "id": "midnight-deploys",
+            "label": "Deploy manually at 2 AM when traffic is low",
+            "detail": "Careful hands, quiet hours, held breath.",
+            "effects": {
+              "debt": 8,
+              "reliability": -4,
+              "morale": -3
+            },
+            "result": "It mostly works. The team starts flinching at release time, and 'deploy' and 'incident' start appearing in the same sentences.",
+            "lesson": "Low-traffic deploys reduce blast radius but not risk. Fear-driven process scales worse than infrastructure."
+          },
+          {
+            "id": "release-freeze",
+            "label": "Freeze all releases until further notice",
+            "detail": "If nothing ships, nothing breaks. Also nothing improves.",
+            "effects": {
+              "morale": -10,
+              "debt": 5,
+              "reputation": -3
+            },
+            "result": "Six weeks of frozen progress while competitors ship daily. The freeze ends when the CEO finds out and unfreezes it personally.",
+            "lesson": "You cannot freeze your way to stability — only automate your way there."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "Staging catches failures that unit tests miss because...",
+      "options": [
+        "It runs the same code faster",
+        "It exercises integrations against a production-like environment",
+        "Developers write better code when watched"
+      ],
+      "answer": 1,
+      "explain": "Unit tests verify logic in isolation. Staging verifies the whole concert: config, migrations, service versions, network policies — the seams where real incidents live."
+    },
+    "codex": [
+      "staging"
+    ],
+    "surge": 1.2,
+    "ambient": [
+      "intern: hotfix pushed straight to prod, whats the worst that could happen",
+      "on-call: famous last words"
+    ]
+  },
+  {
+    "id": "ch7",
+    "act": 2,
+    "num": "07",
+    "title": "The Need for Speed",
+    "tagline": "Caching with Redis",
+    "story": [
+      "Analytics shows the same fifty product queries running thousands of times per minute. Postgres is a genius being asked to recite the phone book all day.",
+      "Pages take 800ms. Every 100ms of latency measurably bleeds conversions."
+    ],
+    "scenes": [
+      {
+        "prompt": "Where does speed come from?",
+        "choices": [
+          {
+            "id": "redis-cache",
+            "label": "Redis for hot reads — with an invalidation plan",
+            "detail": "Catalog pages served from memory in ~2ms. Writes bust keys deliberately, not accidentally.",
+            "effects": {
+              "cash": -14,
+              "speed": 14,
+              "reliability": 3
+            },
+            "unlock": "redis",
+            "deepDive": {
+              "title": "Invalidation & Stampedes",
+              "body": "'There are only two hard things in computer science: cache invalidation and naming things.' When underlying data changes, the cache must change too — via TTL expiry or deliberate key-busting on writes. And beware the thundering herd: when a hot key expires under heavy load, thousands of requests stampede the database at once. Prevent it with request coalescing or staggered expiries."
+            },
+            "result": "p95 drops under 120ms. The site feels instant, conversion ticks up, and Postgres stops being the bottleneck of every request.",
+            "lesson": "Speed is a feature. A slow website is a broken website — and caching is the most powerful tool for speed."
+          },
+          {
+            "id": "more-replicas",
+            "label": "Throw more replicas at it",
+            "detail": "If reads are slow, add readers. Hardware is a strategy.",
+            "effects": {
+              "cash": -12,
+              "speed": 6,
+              "debt": 6
+            },
+            "result": "Better, but every request still crosses the network to SQL for data that hasn't changed in hours. You're paying rent on brute force.",
+            "lesson": "Caching answers once so the database never has to. Replicas answer the same slow way, in parallel."
+          },
+          {
+            "id": "compress-images",
+            "label": "Compress images and call it optimized",
+            "detail": "Cheap wins only.",
+            "effects": {
+              "cash": -3,
+              "speed": 4
+            },
+            "result": "Product photos snap in faster. The dynamic pages are still glacial. Half a fix is still half broken.",
+            "lesson": "Optimizing what's visible while ignoring what's measured is decoration, not engineering."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "When a hot cache key expires during peak traffic, the danger is...",
+      "options": [
+        "The cache shrinks permanently",
+        "A thundering herd of requests hits the database simultaneously",
+        "Redis bills you for the expired key"
+      ],
+      "answer": 1,
+      "explain": "If ten thousand concurrent requests all miss the same expired key, all ten thousand hit the DB before the first response repopulates the cache. Coalesce misses or use soft TTLs."
+    },
+    "codex": [
+      "caching"
+    ],
+    "surge": 1.55,
+    "ambient": [
+      "design: pages LOOK fast on our macbooks?",
+      "#data - every 100ms latency costs ~1% conversion"
+    ]
+  },
+  {
+    "id": "ch8",
+    "act": 2,
+    "num": "08",
+    "title": "Breaking the Monolith",
+    "tagline": "Our first microservice",
+    "story": [
+      "Twelve engineers, one codebase, one deploy train everyone waits for. A typo in search blocks a checkout fix for hours.",
+      "Someone suggests rewriting the whole thing from scratch as microservices. It's the most dangerous sentence in software."
+    ],
+    "scenes": [
+      {
+        "prompt": "How do you carve up the monolith?",
+        "choices": [
+          {
+            "id": "strangler-fig",
+            "label": "Strangler fig: extract catalog service gradually",
+            "detail": "Route catalog traffic to a new service, piece by piece, while the old code keeps working underneath.",
+            "effects": {
+              "cash": -16,
+              "debt": -12,
+              "morale": 5
+            },
+            "unlock": "microservice",
+            "result": "Months later the catalog lives independently, deploys in minutes, and the monolith quietly shrinks. Nobody remembers the big bang everyone feared.",
+            "lesson": "Never rewrite a complex system from scratch — migrate piece by piece, strangler-fig style."
+          },
+          {
+            "id": "big-bang-rewrite",
+            "label": "Full rewrite into microservices, six-month freeze",
+            "detail": "Clean slate. Green fields. Famous last words.",
+            "effects": {
+              "cash": -10,
+              "debt": 18,
+              "morale": -14,
+              "speed": -4
+            },
+            "setFlags": [
+              "rewrite_risk"
+            ],
+            "result": "Feature work stops. The rewrite discovers requirements nobody documented. Nine months in, you run two systems badly instead of one well.",
+            "lesson": "Rewrites trade known debt for unknown risk — and the interest rate is brutal."
+          },
+          {
+            "id": "stay-monolith",
+            "label": "Stay monolithic. Optimize hard instead.",
+            "detail": "Modularize inside, keep one deploy. Refuse the fashion.",
+            "effects": {
+              "debt": 12,
+              "speed": 4
+            },
+            "result": "Deploys stay coupled and risky, but disciplined module boundaries help. For now, the pain stays manageable. Barely.",
+            "lesson": "Microservices solve organizational scaling problems — if you don't have that problem yet, don't borrow it."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "Why is a big-bang rewrite dangerous?",
+      "options": [
+        "New code always runs slower",
+        "Hidden requirements only surface when old behavior must be reproduced",
+        "Microservices require more servers"
+      ],
+      "answer": 1,
+      "explain": "Years of bug fixes encode undocumented business rules. Rewriting rediscovers them one outage at a time. Incremental extraction keeps the old system answering while each piece moves."
+    },
+    "codex": [
+      "strangler"
+    ],
+    "surge": 1.3,
+    "ambient": [
+      "senior-eng: we keep fixing the same three files. just saying.",
+      "me: noted. architecture review friday."
+    ]
+  },
+  {
+    "id": "ch9",
+    "act": 2,
+    "num": "09",
+    "title": "The Unbreakable Promise",
+    "tagline": "Data consistency with Kafka",
+    "story": [
+      "With two services, 'order placed' travels over HTTP. During a network blip, forty orders vanish between services. Finance reconciles against the payment gateway and finds holes.",
+      "An order is a promise to a customer. Promises need a system that cannot forget."
+    ],
+    "scenes": [
+      {
+        "kind": "investigation",
+        "investigation": {
+          "briefing": [
+            "#finance - recon report ready. 41 orders charged but MISSING in admin.",
+            "#support - customer: 'my card was charged but order page says nothing!'",
+            "[MONITORING] network blip region-wide at 19:02, recovered 19:07"
+          ],
+          "checks": [
+            {
+              "id": "recon",
+              "label": "diff gateway CSV vs orders table",
+              "out": "41 rows present in gateway, absent in DB.\nAll timestamps between 19:02:11 and 19:06:58.\nThe exact window of the network blip.",
+              "clue": "window_outage",
+              "cmd": "diff gateway.csv orders"
+            },
+            {
+              "id": "applogs",
+              "label": "grep ETIMEDOUT app.log | tail",
+              "out": "19:02:14 POST inventory-service ETIMEDOUT after 30s\n19:02:15 POST inventory-service ETIMEDOUT after 30s\n...(39 more)\n\nOrder accepted payment FIRST, then tried to notify inventory over HTTP. When the call died, so did the record of the promise.",
+              "clue": "fire_forget_http",
+              "cmd": "grep ETIMEDOUT app.log"
+            },
+            {
+              "id": "code-review",
+              "label": "read checkout service code",
+              "out": "await chargeCard()\n// fire-and-forget: no retry, no queue\nfetch(inventoryUrl, {timeout: 30000})\nreturn OK_TO_CUSTOMER\n\nIf the fetch throws, nobody hears about it. Ever.",
+              "clue": "fire_forget_http",
+              "cmd": "cat checkout.js"
+            }
+          ],
+          "fixes": [
+            {
+              "id": "cron-retry",
+              "label": "Cron job that replays failed orders every few minutes",
+              "requires": [],
+              "effects": {
+                "debt": 6,
+                "reliability": -4
+              },
+              "successText": "Most gaps close themselves now. The ones that do not become 2 AM archaeology digs through logs, matching timestamps by hand.",
+              "lesson": "Reliability patched outside the system decays; reliability designed into the system compounds."
+            },
+            {
+              "id": "kafka-bus",
+              "label": "Introduce Kafka durable event bus + idempotent consumers",
+              "requires": [
+                "fire_forget_http",
+                "window_outage"
+              ],
+              "effects": {
+                "cash": -20,
+                "reliability": 10
+              },
+              "unlock": "kafka",
+              "deepDive": {
+                "title": "Logs, Groups & Idempotency",
+                "body": "Kafka persists events in an ordered, replicated log — once written, they stay written even during a blip. Consumer groups split partitions across parallel workers. Because 'at-least-once' delivery means duplicates WILL happen, consumers deduplicate by key (order ID): processing the same order twice leaves exactly one charge."
+              },
+              "successText": "Every order event lands in a replicated log before the customer sees 'success'. Consumers crash, catch up, never lose count. Finance closes the month without a mystery hole.",
+              "lesson": "A simple messaging hop is a single point of failure. Durable logs with idempotent consumers make lost orders impossible, not unlikely."
+            }
+          ]
+        }
+      }
+    ],
+    "quiz": {
+      "q": "Why do Kafka consumers need idempotency?",
+      "options": [
+        "Kafka delivers at-least-once, so duplicates are guaranteed eventually",
+        "Idempotency makes consumers run faster",
+        "It compresses message payloads"
+      ],
+      "answer": 0,
+      "explain": "At-least-once delivery trades silence for safety: no lost messages, but occasional repeats. Deduplication keys (like order IDs) make processing the same event twice harmless."
+    },
+    "codex": [
+      "kafka"
+    ],
+    "surge": 1.45
+  }
+]

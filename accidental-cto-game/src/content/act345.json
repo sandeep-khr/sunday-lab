@@ -1,0 +1,1002 @@
+[
+  {
+    "id": "ch10",
+    "act": 3,
+    "num": "10",
+    "title": "The Shipping Container Revolution",
+    "tagline": "An introduction to Docker",
+    "story": [
+      "A deploy that ran flawlessly on a laptop crashes in production. Different library versions, different OS patches, different everything.",
+      "Meanwhile your fleet of VMs idles at 12% utilization, each one a snowflake hand-configured by someone who has since left.",
+      "Two problems, one solution: pack the app AND its environment into a standard box."
+    ],
+    "scenes": [
+      {
+        "prompt": "How do you make deploys boring?",
+        "choices": [
+          {
+            "id": "dockerize",
+            "label": "Containerize every service with Docker",
+            "detail": "One Dockerfile per service. The image IS the machine spec — build once, run anywhere.",
+            "effects": {
+              "cash": -15,
+              "speed": 6,
+              "morale": 4,
+              "debt": -10
+            },
+            "unlock": "docker",
+            "deepDive": {
+              "title": "Containers vs Virtual Machines",
+              "body": "VMs virtualize hardware: every guest carries a full operating system, gigabytes heavy and seconds to boot. Containers share the host kernel: an image is just your app plus its dependencies, megabytes light and milliseconds to start. Images are immutable and versioned — 'it works on my machine' dies because the machine no longer matters; the image is the machine."
+            },
+            "result": "'Works on my machine' is retired as a phrase and then as a problem. Deploys ship as versioned images; rollbacks are re-running last Tuesday's tag. Server density triples.",
+            "lesson": "Docker solves the two-headed dragon of inconsistency ('works on my machine') and inefficiency (underutilized servers)."
+          },
+          {
+            "id": "vm-per-service",
+            "label": "Standardize: one VM image per service, kept in sync",
+            "detail": "Bake golden images with all dependencies pre-installed.",
+            "effects": {
+              "cash": -24,
+              "speed": 3,
+              "debt": -4
+            },
+            "result": "Consistency improves, but golden images rot quietly and boot in minutes. You've built heavier containers out of lighter parts.",
+            "lesson": "Solving drift with bigger immutable artifacts works — until artifact size becomes its own tax."
+          },
+          {
+            "id": "config-scripts",
+            "label": "Configuration management scripts on every host",
+            "detail": "Ansible playbooks that converge any machine to the right state.",
+            "effects": {
+              "cash": -6,
+              "debt": 9
+            },
+            "result": "Better than snowflakes, but convergence is probabilistic: two hosts claim identical config yet behave differently at 2 AM.",
+            "lesson": "Describing a machine imperatively can never guarantee it — only packaging it can."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "Why do containers start in milliseconds while VMs take minutes?",
+      "options": [
+        "Containers are compressed better",
+        "Containers share the host kernel instead of booting a full OS",
+        "VMs run on older hardware"
+      ],
+      "answer": 1,
+      "explain": "A container is an isolated process group using the host's kernel via namespaces and cgroups. A VM must power-cycle an entire guest operating system before your app even starts."
+    },
+    "codex": [
+      "docker"
+    ],
+    "surge": 1.35
+  },
+  {
+    "id": "ch10b",
+    "act": 3,
+    "num": "11",
+    "title": "The Smart Clerk",
+    "tagline": "Building world-class search",
+    "story": [
+      "Merchants search for 'red saree under 2000'. Your database answers with SQL LIKE '%red saree%' — scanning every product row, every time.",
+      "Search now accounts for 60% of DB load and returns garbage anyway: no typos tolerated, no relevance ranking, no facets.",
+      "The book's verdict: a simple query is not a substitute for a real search engine."
+    ],
+    "scenes": [
+      {
+        "prompt": "How do you fix search?",
+        "choices": [
+          {
+            "id": "es-cluster",
+            "label": "Stand up an Elasticsearch cluster",
+            "detail": "Index products into an inverted index; get relevance, typo tolerance and facets in milliseconds.",
+            "effects": {
+              "cash": -18,
+              "speed": 10,
+              "reputation": 4
+            },
+            "unlock": "es",
+            "deepDive": {
+              "title": "The Inverted Index",
+              "body": "Databases map document → words; search engines invert it: word → list of documents containing it. Index 'saree' once and every future search for 'saree' jumps straight to its document list — no scanning. Tokenization splits text into terms, stemming matches 'running' to 'run', and scoring ranks results by relevance instead of insertion order."
+            },
+            "result": "Search latency drops from seconds to single-digit milliseconds. Merchants find products they didn't know how to spell. Conversion follows.",
+            "lesson": "SQL LIKE is not a substitute for a real search engine. For text-heavy discovery, use tools built on inverted indexes."
+          },
+          {
+            "id": "pg-fulltext",
+            "label": "Postgres full-text search extensions",
+            "detail": "tsvector indexes inside the database you already run.",
+            "effects": {
+              "cash": -7,
+              "speed": 5,
+              "debt": 5
+            },
+            "result": "Respectable middle ground: indexed search without new infrastructure. But relevance tuning is crude and the DB still carries the load.",
+            "lesson": "Full-text extensions are a fine waypoint — until search becomes a product rather than a feature."
+          },
+          {
+            "id": "tuned-like",
+            "label": "Optimize the LIKE queries and move on",
+            "detail": "Trigram indexes, prefix searches, cross fingers.",
+            "effects": {
+              "cash": -3,
+              "speed": 2,
+              "debt": 8
+            },
+            "result": "Faster scans of everything is still scans of everything. One creative shopper's query will find the remaining edge case.",
+            "lesson": "Making a linear scan faster doesn't stop it being a linear scan."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "An inverted index maps...",
+      "options": [
+        "Documents to their byte offsets",
+        "Terms to the documents containing them",
+        "Queries to cached result sets"
+      ],
+      "answer": 1,
+      "explain": "Like the index at the back of a textbook: look up the word, get the pages. Lookup cost is independent of collection size — that's why search stays fast as catalogs grow."
+    },
+    "codex": [
+      "search"
+    ],
+    "surge": 1.2
+  },
+  {
+    "id": "ch11",
+    "act": 3,
+    "num": "12",
+    "title": "The Delivery Boy",
+    "tagline": "CDNs for static assets",
+    "story": [
+      "Product images load in 40ms in Mumbai and 900ms in Nairobi — every asset crosses the ocean to your single datacenter, twice per page.",
+      "International sellers watch spinners while their buyers swipe away. Physics is taxing your growth."
+    ],
+    "scenes": [
+      {
+        "prompt": "Where should static assets live?",
+        "choices": [
+          {
+            "id": "cdn-front",
+            "label": "Front the world with a CDN",
+            "detail": "Assets replicated to hundreds of edge PoPs; users download from the nearest city.",
+            "effects": {
+              "cash": -20,
+              "speed": 9,
+              "reliability": 3
+            },
+            "unlock": "cdn",
+            "deepDive": {
+              "title": "PoPs & Cache-Control",
+              "body": "A CDN is a global network of Points of Presence — mini datacenters in major cities. Your origin uploads assets once; PoPs fetch and hold them near users. Cache-Control headers decide how long edges keep each file: long max-age for fingerprinted assets (logo.a8f3c.png), short or no-store for anything user-specific. The origin suddenly serves misses only — often less than 20% of traffic."
+            },
+            "result": "Pages paint fast on four continents. Origin bandwidth drops by eighty percent, which finance reads aloud in the next board meeting like poetry.",
+            "lesson": "A CDN is mandatory for any application with a geographically diverse user base — distance is a tax you stop paying at the edge."
+          },
+          {
+            "id": "regional-servers",
+            "label": "Deploy your own regional app servers",
+            "detail": "Three continents, three full stacks, one very tired team.",
+            "effects": {
+              "cash": -34,
+              "speed": 7,
+              "morale": -5,
+              "debt": 10
+            },
+            "result": "Faster abroad, but now you operate three production environments and sync deployments across time zones. Static files didn't need this.",
+            "lesson": "Reserve regions for compute that truly needs locality — not for shipping JPEGs."
+          },
+          {
+            "id": "compress-only",
+            "label": "Compress images harder and call it global",
+            "detail": "WebP conversion, lazy loading.",
+            "effects": {
+              "cash": -4,
+              "speed": 4
+            },
+            "result": "Smaller files still travel the same ocean. A faster spinner is still a spinner.",
+            "lesson": "Latency dominates payload size over long distances — optimize the path, not just the package."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "What does a CDN take OFF your origin server?",
+      "options": [
+        "Database writes",
+        "Most static asset requests, served instead from nearby edge caches",
+        "User authentication"
+      ],
+      "answer": 1,
+      "explain": "Edges serve whatever cache headers allow them to store. With fingerprinted assets and long TTLs, origins typically shed 80%+ of request volume."
+    },
+    "codex": [
+      "cdn"
+    ],
+    "surge": 1.45
+  },
+  {
+    "id": "ch12",
+    "act": 3,
+    "num": "13",
+    "title": "The Conductor",
+    "tagline": "Orchestrating everything with Kubernetes",
+    "story": [
+      "Forty containers across a dozen hosts. Someone restarts them by hand; one gets skipped, another runs twice. Nobody knows what SHOULD be running where.",
+      "You need a conductor: declare the orchestra you want, and let automation keep every musician playing."
+    ],
+    "scenes": [
+      {
+        "prompt": "Who runs the container orchestra?",
+        "choices": [
+          {
+            "id": "managed-k8s",
+            "label": "Adopt managed Kubernetes",
+            "detail": "Declare desired state: replicas, resources, health checks. The control plane reconciles reality forever.",
+            "effects": {
+              "cash": -28,
+              "morale": 6,
+              "reliability": 5
+            },
+            "unlock": "k8s",
+            "deepDive": {
+              "title": "Desired State & Reconciliation",
+              "body": "You never tell Kubernetes WHAT TO DO; you declare what SHOULD EXIST: 'six healthy replicas of catalog v2.3'. Controllers continuously diff declaration against reality and repair the difference — crashed pods restart, dead nodes drain, bad rollouts pause automatically. Self-healing isn't a feature bolted on; it's what reconciliation means."
+            },
+            "result": "A pod dies during lunch; Kubernetes replaces it before anyone's coffee cools. Rolling deploys became a YAML field. The pager got quieter and stayed quieter.",
+            "lesson": "Kubernetes is the conductor for your container orchestra — automated reconciliation replaces error-prone manual operations."
+          },
+          {
+            "id": "self-k8s",
+            "label": "Self-host Kubernetes from scratch",
+            "detail": "kubeadm, custom control planes, maximum learning, maximum pain.",
+            "effects": {
+              "cash": -18,
+              "debt": 14,
+              "morale": -6
+            },
+            "result": "You now employ two engineers whose entire job is keeping the thing that runs the things running. Impressive resume material; questionable business.",
+            "lesson": "Running Kubernetes is a full-time discipline — adopt it as infrastructure, not as a hobby."
+          },
+          {
+            "id": "hire-sres",
+            "label": "Hire more SREs to babysit containers manually",
+            "detail": "Human orchestration, human error rates, human salaries.",
+            "effects": {
+              "cash": -22,
+              "morale": -4,
+              "debt": 6
+            },
+            "result": "Incidents respond faster but occur just as often, because humans reconciling forty containers is whack-a-mole with stakes.",
+            "lesson": "Scaling headcount against combinatorial complexity loses; scaling declarative automation wins."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "A pod crashes at 3 AM. With Kubernetes declared replicas=6, what happens?",
+      "options": [
+        "Nothing until an engineer notices",
+        "The controller notices the diff from desired state and starts a replacement",
+        "All six pods restart"
+      ],
+      "answer": 1,
+      "explain": "Reconciliation loops compare actual vs declared state continuously. Five running ≠ six declared, so a replacement launches — self-healing as a natural consequence of the model."
+    },
+    "codex": [
+      "k8s"
+    ],
+    "surge": 1.5
+  },
+  {
+    "id": "ch13",
+    "act": 4,
+    "num": "14",
+    "title": "The Shark Tank Effect",
+    "tagline": "A trial by fire — tonight, live, national TV",
+    "art": "/art/ch13-shark-tank.png",
+    "story": [
+      "Your founder pitches Dukaan-style catalogs on national television tonight. The producers warn: expect fifty times normal traffic while the episode airs.",
+      "Fifty-x. Tonight. Every merchant watching will open the app at once.",
+      "The book calls it the trial by fire. Systems are judged by the spikes they survive."
+    ],
+    "scenes": [
+      {
+        "prompt": "Six hours until broadcast. What's your prep move?",
+        "choices": [
+          {
+            "id": "load-test-prescale",
+            "label": "Load test to 50x NOW and pre-scale the fleet",
+            "detail": "Rehearse the spike synthetically, provision headroom, warm every cache.",
+            "effects": {
+              "cash": -30,
+              "reliability": 9,
+              "morale": 4
+            },
+            "setFlags": [
+              "prescaled"
+            ],
+            "deepDive": {
+              "title": "Game Days & Load Testing",
+              "body": "Never meet your peak traffic for the first time in production. Synthetic load tests rehearse the wave before it lands, exposing the exact bottleneck queue — it's rarely where you guess. Pre-scaling buys headroom ahead of demand because scale-up itself takes minutes you won't have at minute zero."
+            },
+            "result": "Load testing finds it: replica connections saturate at 30x, not 50x. You raise pool limits, double the fleet and pin autoscaling floors. When the real wave lands, the graphs barely flinch.",
+            "lesson": "Capacity planning is a rehearsal art: stress the system on YOUR schedule so reality can't surprise you on its own."
+          },
+          {
+            "id": "degradation-plan",
+            "label": "Prepare graceful degradation + status page",
+            "detail": "Decide what gets sacrificed first: recommendations off, search simplified, checkout protected at all costs.",
+            "effects": {
+              "cash": -10,
+              "morale": 5,
+              "speed": 5
+            },
+            "setFlags": [
+              "degradation_plan"
+            ],
+            "result": "When CPU screams mid-show, you flip features off in planned order instead of triaging blind. Checkout keeps breathing while nice-to-haves nap.",
+            "lesson": "Graceful degradation turns catastrophe into controlled dimming: protect the core, sacrifice the garnish."
+          },
+          {
+            "id": "hope-and-pray",
+            "label": "Hope it holds. It's fine. Probably.",
+            "detail": "Free. Optimistic. Explosive.",
+            "effects": {},
+            "setFlags": [
+              "winging_it"
+            ],
+            "result": "The pitch lands! Phones light up nationwide... and your dashboard lights up red in the same second. Tonight becomes legendary for two reasons.",
+            "lesson": "Hope is not a capacity strategy — untested systems fail at exactly the moment everyone is watching."
+          }
+        ]
+      },
+      {
+        "prompt": "The episode airs. Traffic explodes past everything you've ever seen. What do you tell merchants?",
+        "choices": [
+          {
+            "id": "status-page-live",
+            "label": "Live status updates every fifteen minutes",
+            "detail": "Honest, frequent, calm. Trust is built in the ditch, not the highway.",
+            "effects": {
+              "reputation": 7,
+              "morale": 3
+            },
+            "result": "Sellers screenshot your calm updates instead of your errors. Half your competitor's traffic arrives next week wearing your logo.",
+            "lesson": "During incidents, communication IS the product: silence breeds panic, candor breeds loyalty."
+          },
+          {
+            "id": "all-hands-manual",
+            "label": "Throw every engineer at it manually, say nothing publicly",
+            "detail": "Heroes in a trench, customers in the dark.",
+            "effects": {
+              "morale": -9,
+              "reputation": -5,
+              "cash": -8
+            },
+            "result": "You survive the night and lose the narrative. Rumors fill the silence you left: 'Dukaan-style apps crash when famous'.",
+            "lesson": "Manual heroics scale linearly; honest communication scales infinitely."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "You know a 50x spike arrives tonight. The professional move is...",
+      "options": [
+        "Wait and monitor closely",
+        "Load-test to 50x beforehand and pre-scale with autoscaling floors",
+        "Ask the TV station to delay the airing"
+      ],
+      "answer": 1,
+      "explain": "Known peaks are rehearsals waiting to happen. Synthetic load exposes bottlenecks privately; pre-scaling removes the cold-start race when the real wave hits."
+    },
+    "codex": [
+      "chaos"
+    ],
+    "surge": 5
+  },
+  {
+    "id": "ch14",
+    "act": 4,
+    "num": "15",
+    "title": "The War on Shopify",
+    "tagline": "Performance as a feature",
+    "art": "/art/ch14-war-shopify.png",
+    "story": [
+      "The giant competitor launches a seller migration campaign with one brutal tagline: 'Loads before you blink.' Their p95 is 90ms; yours is 480ms.",
+      "Merchants notice speed the way shoppers notice prices — instantly, and with their feet.",
+      "This is now a performance war. Speed is a feature, and features win wars."
+    ],
+    "scenes": [
+      {
+        "prompt": "War council. Where does the attack begin?",
+        "choices": [
+          {
+            "id": "profile-hot-paths",
+            "label": "Profile everything; attack measured hot paths",
+            "detail": "Trace real requests, rank the worst offenders, fix what the data indicts.",
+            "effects": {
+              "cash": -12,
+              "speed": 9,
+              "debt": -6
+            },
+            "result": "Traces reveal one ORM call issuing 214 queries per product page. Fixing it alone halves p95. Measurement beats intuition again.",
+            "lesson": "Performance work without profiling is superstition with extra steps."
+          },
+          {
+            "id": "hardware-blitz",
+            "label": "Double every instance size and call it optimized",
+            "detail": "Money as a latency strategy.",
+            "effects": {
+              "cash": -26,
+              "speed": 5
+            },
+            "result": "p95 improves 15% and the bill doubles. Next quarter the same gap returns wearing a smaller discount.",
+            "lesson": "Hardware hides inefficiency briefly; only engineering deletes it."
+          },
+          {
+            "id": "marketing-counter",
+            "label": "Counter-marketing: 'Fast enough for business'",
+            "detail": "Fight perception with perception.",
+            "effects": {
+              "reputation": 3,
+              "speed": -2
+            },
+            "result": "The meme writes itself: side-by-side loading videos, yours second. Perception followed reality here — and reality lost.",
+            "lesson": "You cannot market away a measurable deficit users feel in their thumbs."
+          }
+        ]
+      },
+      {
+        "prompt": "The CEO asks for ONE number to track victory. You pick:",
+        "choices": [
+          {
+            "id": "p95-target",
+            "label": "p95 latency under 150ms, tracked weekly",
+            "detail": "The 95th percentile catches what your slowest REAL users suffer, not the average that hides them.",
+            "effects": {
+              "speed": 8,
+              "morale": 4
+            },
+            "setFlags": [
+              "perf_culture"
+            ],
+            "result": "Dashboards go up in the office. Every PR now quotes its latency delta. Within a quarter you're trading blows with the giant at 130ms.",
+            "lesson": "Percentiles beat averages: averages hide the tail where your angriest users live."
+          },
+          {
+            "id": "average-latency",
+            "label": "Average response time under 100ms",
+            "detail": "Simple, flattering, misleading.",
+            "effects": {
+              "speed": 3
+            },
+            "result": "The average looks gorgeous while one in twenty sellers waits seconds. Those are the ones who churn and post about it.",
+            "lesson": "Averages describe nobody; percentiles describe somebody — usually the customer about to leave."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "Why do performance engineers track p95 instead of average latency?",
+      "options": [
+        "p95 numbers are always lower",
+        "Averages hide the slow tail that real users experience",
+        "Percentiles are required by SLAs"
+      ],
+      "answer": 1,
+      "explain": "Averages smooth away outliers. p95 says '1 in 20 requests was worse than this' — capturing the frustration that averages launder away."
+    },
+    "surge": 1.35
+  },
+  {
+    "id": "ch15",
+    "act": 4,
+    "num": "16",
+    "title": "Our Global Brain",
+    "tagline": "Designing the edge network",
+    "story": [
+      "Sellers in twelve countries. Reads fly around the planet while writes land in one region. Distance adds 200-900ms that no amount of code review can delete.",
+      "The book's thesis: to achieve global low latency, you must move both compute AND data closer to users."
+    ],
+    "scenes": [
+      {
+        "prompt": "How does the platform think globally?",
+        "choices": [
+          {
+            "id": "edge-build",
+            "label": "Build the edge: regional reads + edge functions",
+            "detail": "Catalog data replicated to regions; personalization computed at the edge near each user.",
+            "effects": {
+              "cash": -32,
+              "speed": 12,
+              "reputation": 5
+            },
+            "unlock": "edge",
+            "deepDive": {
+              "title": "The Physics Tax",
+              "body": "Light needs ~70ms round-trip Mumbai→Virginia; nothing optimizes that away except geography. Edge architectures replicate read data into regional stores and run lightweight functions at PoPs, so the long trip happens only for writes. Reads answer locally at single-digit ms; consistency flows outward asynchronously — replication lag, again, but designed for this time."
+            },
+            "result": "A seller in Lagos and a buyer in Delhi both see sub-50ms pages. The globe stops being a latency map and becomes coverage.",
+            "lesson": "Global low latency comes from moving compute and data to the edge — the speed of light is non-negotiable, so relocate instead."
+          },
+          {
+            "id": "one-region-tune",
+            "label": "Keep one region, optimize ruthlessly",
+            "detail": "Shave every millisecond at home base.",
+            "effects": {
+              "cash": -8,
+              "speed": 4
+            },
+            "result": "Mumbai gets blazing; Manila keeps waiting on physics. Half the planet remains second-class users.",
+            "lesson": "Local optimization cannot refund distance — only distribution changes where bytes travel."
+          },
+          {
+            "id": "third-party-edge",
+            "label": "Buy edge functions from a vendor, skip data replication",
+            "detail": "Compute moves to the edge; data stays home.",
+            "effects": {
+              "cash": -18,
+              "speed": 6
+            },
+            "result": "Personalization speeds up, but every render still fetches catalog data cross-ocean. Half the latency budget survives.",
+            "lesson": "Edge compute without edge data still pays the physics tax on every request."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "What latency floor CANNOT be engineered away between continents?",
+      "options": [
+        "TCP handshake overhead",
+        "The speed of light through fiber",
+        "DNS resolution time"
+      ],
+      "answer": 1,
+      "explain": "Round-trip time is bounded by physics: fiber carries light slower than vacuum, but no code makes photons faster. Distribution — moving data nearer users — is the only cure."
+    },
+    "codex": [
+      "edge"
+    ],
+    "surge": 1.4
+  },
+  {
+    "id": "ch16",
+    "act": 5,
+    "num": "17",
+    "title": "Escaping the Golden Cage",
+    "tagline": "From AWS rent to bare metal economics",
+    "story": [
+      "The cloud bill arrives wearing a tuxedo: $340K this month, growing 20% monthly, mostly steady-state instances that never scale down.",
+      "Finance asks the dangerous question: what exactly are we renting, and could we own it cheaper?",
+      "The cloud bought you elasticity when it mattered. Now scale is predictable — and predictability changes the math."
+    ],
+    "scenes": [
+      {
+        "prompt": "What's the infrastructure strategy for the next era?",
+        "choices": [
+          {
+            "id": "hybrid-metal",
+            "label": "Hybrid: migrate steady-state workloads to owned metal",
+            "detail": "Predictable baselines go on racks you amortize; spiky and new workloads stay elastic in cloud.",
+            "effects": {
+              "cash": -45,
+              "morale": -3
+            },
+            "unlock": "bare_metal",
+            "deepDive": {
+              "title": "Unit Economics of Compute",
+              "body": "Cloud pricing sells elasticity and zero-ops — worth real money when demand is unpredictable. But renting forever costs 3-5x owning for stable workloads. The hybrid rule: measure each workload's utilization variance. Steady baselines amortize beautifully on owned hardware; volatile ones justify cloud premiums. Decide per workload, not per company."
+            },
+            "result": "Six months later the baseline bill drops seventy percent. Spiky services stay in cloud where elasticity earns its premium. Finance frames the graph.",
+            "lesson": "Cloud rent buys flexibility; ownership buys margin. Mature platforms split workloads by variance, not fashion."
+          },
+          {
+            "id": "reserved-negotiate",
+            "label": "Negotiate reserved instances & savings plans hard",
+            "detail": "Stay pure-cloud, pay upfront, extract discounts.",
+            "effects": {
+              "cash": -25,
+              "morale": 2
+            },
+            "result": "Thirty percent off forever-ish. Respectable — though you now commit spend years ahead to a landlord who knows you can't leave easily.",
+            "lesson": "Discounts soften lock-in's price without changing its direction."
+          },
+          {
+            "id": "stay-fullcloud",
+            "label": "Stay all-in. Elasticity is worth every rupee.",
+            "detail": "Focus stays on product; ops stays someone else's job.",
+            "effects": {
+              "morale": 4
+            },
+            "result": "Engineering velocity stays high and bills keep climbing. Defensible — until margins matter more than velocity.",
+            "lesson": "There is no universally right answer — only unit economics measured per workload per quarter."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "Which workload belongs on OWNED bare metal first?",
+      "options": [
+        "The flash-sale traffic spike",
+        "The always-on catalog service at constant 80% utilization",
+        "Next week's experiment"
+      ],
+      "answer": 1,
+      "explain": "Ownership pays off through amortization, which requires predictable usage. Steady-state workloads convert directly into savings; spiky ones need cloud elasticity."
+    },
+    "codex": [
+      "cloud_econ"
+    ],
+    "surge": 1.25
+  },
+  {
+    "id": "ch16b",
+    "act": 5,
+    "num": "18",
+    "title": "The Whale",
+    "tagline": "Onboarding an enterprise",
+    "story": [
+      "A retail giant wants in: 40,000 stores on your platform. Their procurement team sends a 60-page requirements doc — SSO, audit logs, 99.95% uptime SLA with penalties, dedicated support.",
+      "This whale is half your revenue target for the year. Whales also beach startups that aren't ready."
+    ],
+    "scenes": [
+      {
+        "prompt": "The whale approaches. How do you answer?",
+        "choices": [
+          {
+            "id": "enterprise-tier",
+            "label": "Build a real enterprise tier",
+            "detail": "SSO/SAML, audit trails, RBAC, SLA monitoring dashboards. Productized, not hacked.",
+            "effects": {
+              "cash": -28,
+              "morale": -4,
+              "reputation": 6
+            },
+            "unlock": "enterprise",
+            "result": "Eight weeks of grinding work, then a reusable tier every large merchant can buy. The whale signs; three dolphins follow within a quarter.",
+            "lesson": "Enterprise readiness is a product surface, not a favor — build it once, sell it many times."
+          },
+          {
+            "id": "quick-fork",
+            "label": "Fork the codebase for them, fast",
+            "detail": "Custom branch, custom everything, deliverable next sprint.",
+            "effects": {
+              "cash": -8,
+              "debt": 20,
+              "morale": -8
+            },
+            "setFlags": [
+              "whale_fork"
+            ],
+            "result": "The whale signs too. So begins a permanent second codebase absorbing security patches months late, drifting further each release.",
+            "lesson": "A forked codebase is a technical divorce: every improvement must now happen twice or age badly."
+          },
+          {
+            "id": "decline-whale",
+            "label": "Decline until the platform is ready",
+            "detail": "Protect the product and the team. Lose the year's biggest deal.",
+            "effects": {
+              "morale": 5,
+              "reputation": -3
+            },
+            "result": "The team exhales. The whale swims to a competitor who says yes to everything, including things they'll regret.",
+            "lesson": "Knowing what NOT to sell yet is strategy; knowing WHEN you're ready is architecture."
+          }
+        ]
+      },
+      {
+        "prompt": "Procurement circles back to the SLA: 99.95% uptime, penalties attached. Legal asks if we sign.",
+        "choices": [
+          {
+            "id": "sla-sign-budget",
+            "label": "Sign 99.95% with an explicit error budget",
+            "detail": "99.95% = ~22 minutes downtime per month. Instrument it, alert on burn rate, treat the budget as roadmap guidance.",
+            "effects": {
+              "reliability": 5,
+              "morale": 3
+            },
+            "setFlags": [
+              "sla_discipline"
+            ],
+            "result": "Error budgets become the shared language between sales and engineering: features pause when budgets burn, and nobody argues with arithmetic.",
+            "lesson": "SLAs signed without measurement are wishes; SLAs wired to error budgets become operating systems for reliability."
+          },
+          {
+            "id": "overpromise",
+            "label": "Promise 99.99% to close TODAY",
+            "detail": "Five nines = ~4.4 minutes per month. Sales is thrilled. Nobody asks the SREs.",
+            "effects": {
+              "cash": -10,
+              "morale": -7,
+              "reputation": 4
+            },
+            "setFlags": [
+              "overpromise"
+            ],
+            "result": "Deal closed with champagne. Then January's routine deploy eats the whole annual budget in one evening, and penalties arrive itemized.",
+            "lesson": "Promise only what architecture already delivers — aspirational SLAs are prepaid apologies."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "A 99.95% availability SLA allows roughly how much downtime per month?",
+      "options": [
+        "~22 minutes",
+        "~4 minutes",
+        "~90 minutes"
+      ],
+      "answer": 0,
+      "explain": "43,200 minutes/month × 0.0005 ≈ 21.6 minutes. Knowing your budget precisely is the difference between an SLA and a suicide note."
+    },
+    "codex": [
+      "sla"
+    ],
+    "surge": 1.5
+  },
+  {
+    "id": "ch18",
+    "act": 5,
+    "num": "19",
+    "title": "Ship Daily Without Fear",
+    "tagline": "CI/CD and progressive delivery",
+    "story": [
+      "Deploys happen Thursdays, in fear, all-at-once. Every release is a lottery where sometimes the prize is an outage.",
+      "The book's claim: CI/CD is the foundation of modern, agile software delivery. You have staging; now automate the road to it and beyond."
+    ],
+    "scenes": [
+      {
+        "prompt": "Design the delivery pipeline.",
+        "choices": [
+          {
+            "id": "full-cicd-canary",
+            "label": "Full CI/CD with canary releases",
+            "detail": "Every commit runs tests; every deploy ramps 1% → 10% → 100% with auto-rollback on error spikes.",
+            "effects": {
+              "cash": -14,
+              "morale": 7,
+              "debt": -12
+            },
+            "unlock": "cicd",
+            "deepDive": {
+              "title": "Progressive Delivery",
+              "body": "CI gates: every commit builds and runs the suite, keeping branches short-lived and integrations small. CD extends trust gradually: a canary takes 1% of real traffic while automated analysis compares its error rate and latency to stable. Healthy? Ramp. Sick? Auto-rollback in minutes — the blast radius of a bad release shrinks from 'everyone' to 'a focus group'."
+            },
+            "result": "Deploys happen eleven times a day and bore everyone, which is the point. A bad release reaches 1% of users for four minutes instead of 100% for four hours.",
+            "lesson": "CI/CD turns releases from events into non-events — the pipeline absorbs the fear so users absorb none of it."
+          },
+          {
+            "id": "ci-only",
+            "label": "CI only — automate tests, keep human-driven deploys",
+            "detail": "Green builds everywhere; humans still pull the prod lever.",
+            "effects": {
+              "cash": -6,
+              "morale": 3,
+              "debt": -5
+            },
+            "result": "Integration pain vanishes and confidence rises. But deploys remain ceremonies, so they stay rare, and rare releases stay risky.",
+            "lesson": "Continuous integration without continuous delivery automates the recipe but still cooks by hand."
+          },
+          {
+            "id": "deploy-friday",
+            "label": "Keep Friday big-bang deploys, add a checklist",
+            "detail": "Tradition, now with checkboxes.",
+            "effects": {
+              "debt": 8,
+              "morale": -4
+            },
+            "result": "The checklist catches some mistakes; the batch size guarantees that when something slips, everything slips together.",
+            "lesson": "Checklists polish a process; small batches replace it."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "A canary release means...",
+      "options": [
+        "Testing only on canary-branded devices",
+        "Routing a tiny slice of real traffic to the new version and comparing health metrics",
+        "Releasing only on weekends"
+      ],
+      "answer": 1,
+      "explain": "Canaries trade a microscopic blast radius for production truth: real traffic, real data, automatic comparison — and automatic rollback when the canary sings off-key."
+    },
+    "codex": [
+      "cicd"
+    ],
+    "surge": 1.2
+  },
+  {
+    "id": "ch19",
+    "act": 5,
+    "num": "20",
+    "title": "The Spotlight",
+    "tagline": "From accidental CTO to tech leader",
+    "story": [
+      "You're hiring ten engineers in a market where every competitor bids for the same resumes. Job posts and salary bands feel identical everywhere.",
+      "But you have something competitors don't: a story. Scaling from one VPS to millions of merchants is a story top talent wants to help write.",
+      "The book insists: your engineering story is one of your most powerful recruiting tools."
+    ],
+    "scenes": [
+      {
+        "prompt": "How do you compete for talent?",
+        "choices": [
+          {
+            "id": "tell-the-story",
+            "label": "Tell the engineering story loudly",
+            "detail": "Blog the architecture, speak at conferences, publish postmortems, open-source tooling.",
+            "effects": {
+              "reputation": 9,
+              "morale": 6,
+              "cash": -5
+            },
+            "result": "Inbound applications triple, and candidates arrive already understanding your stack — half the interview is done. Two senior hires cite the outage postmortem series specifically.",
+            "lesson": "Top talent is attracted to hard problems honestly told — visibility converts your scars into recruiting assets."
+          },
+          {
+            "id": "agency-route",
+            "label": "Outsource hiring to agencies, stay heads-down",
+            "detail": "Pay the fee, skip the spotlight.",
+            "effects": {
+              "cash": -18,
+              "morale": -2
+            },
+            "result": "Positions fill, eventually, with engineers who chose salary over story. Retention tells the rest of the tale.",
+            "lesson": "Agencies source candidates; stories source conviction. Only conviction survives hard sprints."
+          },
+          {
+            "id": "secrecy",
+            "label": "Keep the architecture secret — competitors might copy",
+            "detail": "Total radio silence.",
+            "effects": {
+              "morale": 1,
+              "reputation": -4
+            },
+            "result": "Nobody copies you. Nobody hears of you either. The moat was never the diagram; it's the decade of decisions behind it.",
+            "lesson": "Architecture diagrams are cheap to copy and worthless without the judgment that drew them."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "According to the book, what attracts top engineering talent most?",
+      "options": [
+        "The highest salary band",
+        "Hard, meaningful problems told honestly",
+        "Free snacks and beanbags"
+      ],
+      "answer": 1,
+      "explain": "Great engineers optimize for growth and meaning. A visible story of real problems — with real postmortems — signals both better than any perk list."
+    },
+    "codex": [
+      "brand"
+    ],
+    "surge": 1.3
+  },
+  {
+    "id": "ch20",
+    "act": 7,
+    "num": "21",
+    "title": "The Grand Finale",
+    "tagline": "A live failover, on stage, in front of everyone",
+    "story": [
+      "Keynote day. Ten thousand watchers, plus every merchant you have. The plan: demo resilience by KILLING your primary region live on stage — and letting the platform heal itself.",
+      "The book's line lands differently now: the ultimate test of a resilient system is handling unexpected failure with grace.",
+      "You built every piece of this. Time to prove it in public."
+    ],
+    "scenes": [
+      {
+        "prompt": "Week before the keynote. Rehearsal strategy?",
+        "choices": [
+          {
+            "id": "game-days",
+            "label": "Run game days: kill regions in staging, repeatedly",
+            "detail": "Chaos engineering as rehearsal. Fail on purpose until failure is familiar.",
+            "effects": {
+              "cash": -16,
+              "reliability": 8,
+              "morale": 5
+            },
+            "setFlags": [
+              "rehearsed"
+            ],
+            "deepDive": {
+              "title": "Game Days",
+              "body": "A game day injects failure deliberately — terminate the primary, blackhole a region, expire certificates — while the team practices the runbook like a fire drill. Every gap found in rehearsal is an outage that never happens in production. Untested failover is a hypothesis; game days convert hypotheses into capabilities."
+            },
+            "result": "Run three drills, find four gaps: a stale DNS TTL, a standby missing yesterday's schema migration, an alert nobody owns. All fixed quietly. Confidence earned, not asserted.",
+            "lesson": "Fire drills don't cause fires; they reveal what burns."
+          },
+          {
+            "id": "docs-only",
+            "label": "Update the runbook docs and trust the team",
+            "detail": "Documentation as preparation.",
+            "effects": {
+              "cash": -3,
+              "reliability": 2
+            },
+            "result": "Beautiful runbooks nobody has ever executed under pressure. Paper confidence.",
+            "lesson": "A runbook unread under adrenaline is a wish written down."
+          },
+          {
+            "id": "wing-keynote",
+            "label": "Skip rehearsals — live drama sells tickets",
+            "detail": "What could possibly go wrong on stage?",
+            "effects": {
+              "morale": -3
+            },
+            "setFlags": [
+              "winging_finale"
+            ],
+            "result": "The demo gods take note and begin sharpening something.",
+            "lesson": "Improv works in comedy, not in distributed systems."
+          }
+        ]
+      },
+      {
+        "prompt": "On stage. You type the command that terminates the primary region. The audience holds its breath.",
+        "choices": [
+          {
+            "id": "calm-failover",
+            "label": "Watch the system fail over itself, narrating calmly",
+            "detail": "Health checks fire, traffic drains to standby, Kafka consumers reconnect. Thirty seconds. Applause.",
+            "effects": {
+              "reliability": 6,
+              "morale": 8,
+              "reputation": 12,
+              "cash": 20
+            },
+            "setFlags": [
+              "failover_passed"
+            ],
+            "result": "Thirty-four seconds after termination, monitoring declares full recovery. The room erupts; the clip hits a million views by dinner. Three enterprise leads email before you leave the stage.",
+            "lesson": "The ultimate test of resilience is failing gracefully in public — and only rehearsed systems manage it."
+          },
+          {
+            "id": "panic-rollback",
+            "label": "Abort halfway and restore everything manually",
+            "detail": "Safe-ish. Sweaty. Memorable for the wrong reasons.",
+            "effects": {
+              "reliability": 2,
+              "morale": -4,
+              "reputation": -6
+            },
+            "result": "You recover in eight minutes of visible sweating. The demo technically 'worked', the way surviving a plane landing on a highway technically counts as parking.",
+            "lesson": "Audiences forgive failures; they never forget panic."
+          },
+          {
+            "id": "blame-intern",
+            "label": "Blame the intern's recent merge, live",
+            "detail": "Comedy gold. Career lead.",
+            "effects": {
+              "morale": -14,
+              "reputation": -12
+            },
+            "result": "Laughter dies fast when the intern's merge turns out unrelated. Your blameless culture dies on camera with it.",
+            "lesson": "Blame is the one failure no postmortem can recover."
+          }
+        ]
+      }
+    ],
+    "quiz": {
+      "q": "The book's final lesson: an untested failover mechanism is...",
+      "options": [
+        "A capability you can be proud of",
+        "A hypothesis, not a capability",
+        "Only needed for enterprise customers"
+      ],
+      "answer": 1,
+      "explain": "Failover code that has never executed under real conditions is an assumption. Chaos engineering and game days exist to convert assumptions into proven behavior — before reality volunteers to test it for you."
+    },
+    "codex": [
+      "postmortem"
+    ],
+    "surge": 1.15
+  }
+]

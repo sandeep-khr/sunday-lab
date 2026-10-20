@@ -1,0 +1,185 @@
+@import "tailwindcss";
+
+@theme {
+  --color-abyss: #070b14;
+  --color-panel: #0d1524;
+  --color-panel-2: #111c30;
+  --color-edge: #1e2d47;
+  --color-cyan-glow: #22d3ee;
+  --color-amber-glow: #fbbf24;
+  --color-red-alert: #fb4d63;
+  --color-green-ok: #34d399;
+  --font-display: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background-color: var(--color-abyss);
+  color: #dbe6f5;
+  font-family: var(--font-display);
+  overflow: hidden;
+}
+
+.grid-bg {
+  background-image:
+    radial-gradient(circle at 25% 15%, rgba(34, 211, 238, 0.07), transparent 45%),
+    radial-gradient(circle at 80% 85%, rgba(251, 191, 36, 0.05), transparent 40%),
+    linear-gradient(rgba(30, 45, 71, 0.35) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 45, 71, 0.35) 1px, transparent 1px);
+  background-size: auto, auto, 44px 44px, 44px 44px;
+}
+
+.panel {
+  background: linear-gradient(180deg, var(--color-panel-2), var(--color-panel));
+  border: 1px solid var(--color-edge);
+}
+
+.glow-cyan {
+  box-shadow: 0 0 24px rgba(34, 211, 238, 0.18), inset 0 0 12px rgba(34, 211, 238, 0.06);
+}
+.glow-red {
+  box-shadow: 0 0 28px rgba(251, 77, 99, 0.3), inset 0 0 12px rgba(251, 77, 99, 0.08);
+}
+
+.wire {
+  stroke: #23375a;
+  stroke-width: 1.5;
+  fill: none;
+}
+.wire-active {
+  stroke: #2e4b74;
+}
+.wire-dim {
+  stroke: #22406b;
+  stroke-width: 1.1;
+}
+.wire-alert {
+  stroke: rgba(251, 77, 99, 0.7);
+  stroke-width: 2;
+}
+
+.packet {
+  fill: var(--color-cyan-glow);
+  filter: drop-shadow(0 0 3px rgba(34, 211, 238, 0.9));
+}
+.packet-dim {
+  fill: #fbbf24aa;
+  filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.7));
+}
+.packets-alert .packet {
+  fill: var(--color-red-alert);
+  filter: drop-shadow(0 0 4px rgba(251, 77, 99, 0.95));
+}
+
+.node-label {
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+}
+
+@keyframes alert-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+.alert-pulse {
+  animation: alert-pulse 0.9s ease-in-out infinite;
+}
+
+@keyframes scanline {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(100vh);
+  }
+}
+.scanline::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, rgba(34, 211, 238, 0.04), transparent);
+  height: 30%;
+  animation: scanline 7s linear infinite;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e2d47;
+  border-radius: 4px;
+}
+
+@keyframes shake-once {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-5px, 2px); }
+  40% { transform: translate(4px, -3px); }
+  60% { transform: translate(-3px, -2px); }
+  80% { transform: translate(2px, 3px); }
+}
+.shake-once {
+  animation: shake-once 0.55s ease-in-out;
+}
+
+@keyframes vignette {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+.alert-mode main::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  box-shadow: inset 0 0 140px rgba(251, 77, 99, 0.28), inset 0 0 40px rgba(251, 77, 99, 0.15);
+  animation: vignette 1.1s ease-in-out infinite;
+}
+
+@keyframes kenburns {
+  from { transform: scale(1.14) translate(2%, 1%); }
+  to { transform: scale(1) translate(0, 0); }
+}
+.kenburns {
+  animation: kenburns 16s ease-out forwards;
+}
+
+@keyframes glitch-jitter {
+  0%, 88%, 100% { transform: translate(0); filter: none; }
+  90% { transform: translate(-3px, 1px); filter: hue-rotate(20deg); }
+  92% { transform: translate(3px, -1px); }
+  94% { transform: translate(-2px, 0); }
+}
+.glitch {
+  position: relative;
+  animation: glitch-jitter 3.2s infinite;
+}
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0.35;
+  pointer-events: none;
+}
+.glitch::before {
+  color: #fb4d63;
+  clip-path: inset(12% 0 58% 0);
+  transform: translateX(-2px);
+}
+.glitch::after {
+  color: #22d3ee;
+  clip-path: inset(62% 0 8% 0);
+  transform: translateX(2px);
+}
