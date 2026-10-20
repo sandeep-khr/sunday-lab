@@ -1,0 +1,16 @@
+.DS_Store
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.pyc
+.coverage
+htmlcov/
+node_modules/
+dist/
+var/
+*.log
+.env
+docs/
+
+interview-prep/
